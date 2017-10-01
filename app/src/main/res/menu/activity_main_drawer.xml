@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/cpu"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="CPU" />
+        <item
+            android:id="@+id/gpu"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="GPU" />
+        <item
+            android:id="@+id/ssd"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="SSD" />
+        <item
+            android:id="@+id/hdd"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="HDD" />
+        <item
+            android:id="@+id/usb"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="USB" />
+    </group>
+
+    <item android:title="Share this app!">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+        </menu>
+    </item>
+
+</menu>
