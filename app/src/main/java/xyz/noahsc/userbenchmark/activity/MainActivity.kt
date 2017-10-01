@@ -1,4 +1,4 @@
-package xyz.noahsc.userbenchmark
+package xyz.noahsc.userbenchmark.activity
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -10,8 +10,8 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import org.jetbrains.anko.*
-import org.w3c.dom.Text
+import xyz.noahsc.userbenchmark.R
+import xyz.noahsc.userbenchmark.data.readCSV
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -22,8 +22,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
-        val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.setDrawerListener(toggle)
         toggle.syncState()
 
@@ -65,8 +64,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when (id){
             R.id.cpu -> {
-                val textView: TextView = findViewById(R.id.mainText) as TextView
-                textView.text = "test"
+                val textView = findViewById(R.id.mainText) as TextView
+                val result = readCSV("GPU_UserBenchmarks.csv", applicationContext)
+                textView.text = result
             }
             R.id.gpu -> {
 
