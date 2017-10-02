@@ -12,49 +12,35 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:adjustViewBounds="true"
-        android:cropToPadding="true"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:scaleType="fitCenter"
+        android:scaleType="center"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.926"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="24sp"
-        android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/app_name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintVertical_bias="0.436"
+        app:srcCompat="@mipmap/badge1" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/email"
+        android:textSize="14sp"
         android:visibility="visible"
-        tools:text="@string/email"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        tools:text="@string/email" />
 
 </android.support.constraint.ConstraintLayout>
