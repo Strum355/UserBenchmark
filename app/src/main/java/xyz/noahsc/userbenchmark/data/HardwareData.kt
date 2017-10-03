@@ -16,8 +16,8 @@ fun dataToCard(h: HardwareData, ctx: Context): CardView {
     val card = CardView(ctx)
     val partNum = TextView(ctx)
     partNum.text = h.partNum
-    for(textview in dataToTextViews(h, ctx)) {
-        card.addView(textview)
+    for(textView in dataToTextViews(h, ctx)) {
+        card.addView(textView)
     }
 
     return card

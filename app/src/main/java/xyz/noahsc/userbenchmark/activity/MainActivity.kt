@@ -6,14 +6,17 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.CardView
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.*
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.ScrollView
 import android.widget.TextView
 import xyz.noahsc.userbenchmark.R
+import xyz.noahsc.userbenchmark.data.DataAdapter
+import xyz.noahsc.userbenchmark.data.HardwareData
 import xyz.noahsc.userbenchmark.data.dataToCard
 import xyz.noahsc.userbenchmark.data.readCSV
 
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -63,19 +67,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
         val id = item.itemId
-        val listView = findViewById<ListView>(R.id.listView)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         when (id){
             R.id.cpu -> {
 
             }
             R.id.gpu -> {
                 val result = readCSV("GPU_UserBenchmarks.csv", applicationContext)
-                for(data in result) {
-                    val card = dataToCard(data, applicationContext)
-                    listView.addView(card)
-                }
+                recyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+                val adapter = DataAdapter(result)
+                recyclerView.adapter = adapter
             }
             R.id.ssd -> {
 
