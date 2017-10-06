@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
+    android:layout_marginBottom="1.5dp"
+    android:layout_marginLeft="1.5dp"
+    android:layout_marginRight="1.5dp"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
@@ -13,11 +15,12 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="85dp"
+        app:cardElevation="0dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp">
 
             <TextView
@@ -25,6 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
@@ -34,62 +38,45 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_constraintLeft_creator="1"
                 tools:layout_constraintTop_creator="1"
-                tools:text="Test" />
+                tools:text="1st" />
 
             <TextView
-                android:id="@+id/brand"
-                android:layout_width="wrap_content"
+                android:id="@+id/hardware"
+                android:layout_width="334dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="49dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_constraintLeft_creator="1"
-                tools:layout_constraintTop_creator="1"
-                tools:text="Test" />
-
-            <TextView
-                android:id="@+id/model"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/brand"
-                app:layout_constraintHorizontal_bias="0.568"
-                app:layout_constraintLeft_toRightOf="@+id/brand"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                tools:layout_constraintLeft_creator="1"
-                tools:text="EVAG GTX 1080 TI Founders Edition SC" />
-
-            <TextView
-                android:id="@+id/benchmark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp"
-                tools:text="Test"
-                app:layout_constraintBaseline_toBaselineOf="@+id/samples"
-                app:layout_constraintLeft_toRightOf="@+id/rank"
-                android:layout_marginLeft="52dp" />
+                app:layout_constraintTop_toBottomOf="@+id/rank"
+                tools:layout_constraintTop_creator="1"
+                tools:text="Toshiba THNSN5256GPU7 TO NVM" />
 
             <TextView
                 android:id="@+id/samples"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="62dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/benchmark"
-                tools:text="Test"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="16dp" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/rank"
+                app:layout_constraintLeft_toRightOf="@+id/rank"
+                tools:text="Samples: 534024" />
+
+            <TextView
+                android:id="@+id/relative_perf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:textSize="12sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/samples"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="Relative Performance: 200%" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

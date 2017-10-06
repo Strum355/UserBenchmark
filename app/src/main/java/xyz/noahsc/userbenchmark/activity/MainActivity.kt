@@ -1,5 +1,6 @@
 package xyz.noahsc.userbenchmark.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -7,18 +8,12 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
-import android.widget.ListView
-import android.widget.ScrollView
-import android.widget.TextView
 import xyz.noahsc.userbenchmark.R
-import xyz.noahsc.userbenchmark.data.DataAdapter
-import xyz.noahsc.userbenchmark.data.HardwareData
-import xyz.noahsc.userbenchmark.data.dataToCard
-import xyz.noahsc.userbenchmark.data.readCSV
+import xyz.noahsc.userbenchmark.data.*
+import org.jetbrains.anko.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -69,24 +64,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+
         when (id){
             R.id.cpu -> {
-
+                makeHardwareDataUI("CPU_UserBenchmarks.csv", applicationContext, recyclerView)
             }
             R.id.gpu -> {
-                val result = readCSV("GPU_UserBenchmarks.csv", applicationContext)
-                recyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-                val adapter = DataAdapter(result)
-                recyclerView.adapter = adapter
+                makeHardwareDataUI("GPU_UserBenchmarks.csv", applicationContext, recyclerView)
             }
             R.id.ssd -> {
-
+                makeHardwareDataUI("SSD_UserBenchmarks.csv", applicationContext, recyclerView)
             }
             R.id.hdd -> {
-
+                makeHardwareDataUI("HDD_UserBenchmarks.csv",applicationContext, recyclerView)
             }
             R.id.usb -> {
-
+                makeHardwareDataUI("USB_UserBenchmarks.csv", applicationContext, recyclerView)
             }
         }
 
@@ -94,4 +88,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
+
+    private fun makeHardwareDataUI(file: String, appCtx: Context, rv: RecyclerView) {
+        doAsync {
+            val result = readCSV(file, appCtx)
+            uiThread {
+                rv.adapter = DataAdapter(filterDuplicateURLS(result))
+            }
+        }
+    }
 }
+

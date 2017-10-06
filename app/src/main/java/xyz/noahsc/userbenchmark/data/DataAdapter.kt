@@ -1,6 +1,7 @@
 package xyz.noahsc.userbenchmark.data
 
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,21 +14,19 @@ class DataAdapter(val partsList: ArrayList<HardwareData>) : RecyclerView.Adapter
 
         fun bindItems(data: HardwareData, position: Int) {
             val rank: TextView = this.itemView.findViewById(R.id.rank)
-            val brand: TextView = this.itemView.findViewById(R.id.brand)
-            val model: TextView = this.itemView.findViewById(R.id.model)
-            val benchmark: TextView = this.itemView.findViewById(R.id.benchmark)
+            val hardware: TextView = this.itemView.findViewById(R.id.hardware)
             val samples: TextView = this.itemView.findViewById(R.id.samples)
+            val rel_perf: TextView = this.itemView.findViewById(R.id.relative_perf)
             var end = "th"
             when (position % 10) {
                 1 -> end = "st"
                 2 -> end = "nd"
                 3 -> end = "rd"
             }
-            rank.text = position.toString()+end
-            brand.text = data.brand
-            model.text = data.model
-            benchmark.text = data.benchmark.toString()
-            samples.text = "Samples: "+ data.samples.toString()
+            rank.text = "$position$end"
+            hardware.text = Html.fromHtml("<b>${data.brand}</b> ${data.model}")
+            samples.text = "Samples: ${data.samples}"
+            rel_perf.text = "Relative Performance: ${data.benchmark}%"
         }
     }
 
