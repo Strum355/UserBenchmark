@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Sort Descending"
+          android:id="@+id/sort-desc"/>
+    <item android:title="Sort Ascending"
+          android:id="@+id/sort-asc"/>
+    <item android:title="Item" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

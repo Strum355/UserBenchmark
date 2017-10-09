@@ -17,20 +17,40 @@ import org.jetbrains.anko.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    private var current = ""
+    private var cpu: ArrayList<HardwareData>? = ArrayList()
+    private var gpu: ArrayList<HardwareData>? = ArrayList()
+    private var ssd: ArrayList<HardwareData>? = ArrayList()
+    private var hdd: ArrayList<HardwareData>? = ArrayList()
+    private var usb: ArrayList<HardwareData>? = ArrayList()
+    private var ram: ArrayList<HardwareData>? = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = ""
         setSupportActionBar(toolbar)
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.setDrawerListener(toggle)
+        drawer.addDrawerListener(toggle)
         toggle.syncState()
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
+        navigationView.setCheckedItem(R.id.home)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+
+        cpu = savedInstanceState?.getParcelableArrayList("cpu")
+        gpu = savedInstanceState?.getParcelableArrayList("gpu")
+        ssd = savedInstanceState?.getParcelableArrayList("ssd")
+        hdd = savedInstanceState?.getParcelableArrayList("hdd")
+        usb = savedInstanceState?.getParcelableArrayList("usb")
+        ram = savedInstanceState?.getParcelableArrayList("ram")
     }
 
     override fun onBackPressed() {
@@ -43,19 +63,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.sort, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
+        when(current){
+            "" -> toast("Must be in a hardware group!")
+            "cpu" -> {
+                when(id) {
+                    R.id.sort_asc -> {
+                        
+                    }
+                }
+            }
+        }
 
         return if (id == R.id.action_settings) {
+
             true
         } else super.onOptionsItemSelected(item)
 
@@ -64,23 +91,46 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+        val toolbar      = findViewById<Toolbar>(R.id.toolbar)
 
-        when (id){
+        when(id) {
+            R.id.home -> {
+                toolbar.title = ""
+                current = ""
+            }
             R.id.cpu -> {
-                makeHardwareDataUI("CPU_UserBenchmarks.csv", applicationContext, recyclerView)
+                makeHardwareDataUI(cpu, applicationContext, recyclerView)
+                toolbar.title = "CPU"
+                current = "cpu"
             }
             R.id.gpu -> {
-                makeHardwareDataUI("GPU_UserBenchmarks.csv", applicationContext, recyclerView)
+                makeHardwareDataUI(gpu, applicationContext, recyclerView)
+                toolbar.title = "GPU"
+                current = "gpu"
             }
             R.id.ssd -> {
-                makeHardwareDataUI("SSD_UserBenchmarks.csv", applicationContext, recyclerView)
+                makeHardwareDataUI(ssd, applicationContext, recyclerView)
+                toolbar.title = "SSD"
+                current = "ssd"
             }
             R.id.hdd -> {
-                makeHardwareDataUI("HDD_UserBenchmarks.csv",applicationContext, recyclerView)
+                makeHardwareDataUI(hdd,applicationContext, recyclerView)
+                toolbar.title = "HDD"
+                current = "hdd"
             }
             R.id.usb -> {
-                makeHardwareDataUI("USB_UserBenchmarks.csv", applicationContext, recyclerView)
+                makeHardwareDataUI(usb, applicationContext, recyclerView)
+                toolbar.title = "USB"
+                current = "usb"
+            }
+            R.id.ram -> {
+                makeHardwareDataUI(ram, applicationContext, recyclerView)
+                toolbar.title = "RAM"
+                current = "ram"
+            }
+            R.id.share -> {
+                share("test")
+                current = ""
             }
         }
 
@@ -89,11 +139,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun makeHardwareDataUI(file: String, appCtx: Context, rv: RecyclerView) {
+    private fun makeHardwareDataUI(list: ArrayList<HardwareData>?, appCtx: Context, rv: RecyclerView) {
         doAsync {
-            val result = readCSV(file, appCtx)
             uiThread {
-                rv.adapter = DataAdapter(filterDuplicateURLS(result))
+                rv.adapter = DataAdapter(filterDuplicateURLS(list))
             }
         }
     }

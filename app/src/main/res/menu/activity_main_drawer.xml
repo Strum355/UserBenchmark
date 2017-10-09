@@ -3,31 +3,39 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
             android:id="@+id/cpu"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_cpu"
             android:title="CPU" />
         <item
             android:id="@+id/gpu"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_gpu"
             android:title="GPU" />
         <item
             android:id="@+id/ssd"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_ssd"
             android:title="SSD" />
         <item
             android:id="@+id/hdd"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_hdd"
             android:title="HDD" />
         <item
+            android:id="@+id/ram"
+            android:icon="@drawable/ic_ram"
+            android:title="RAM" />
+        <item
             android:id="@+id/usb"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_usb"
             android:title="USB" />
     </group>
 
     <item android:title="Share this app!">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
         </menu>
