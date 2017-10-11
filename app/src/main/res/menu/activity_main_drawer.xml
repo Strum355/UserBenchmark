@@ -32,6 +32,16 @@
             android:title="USB" />
     </group>
 
+    <item android:title="Sort">
+        <menu>
+            <item
+                android:id="@+id/rank_asc"
+                android:title="Rank Ascending" />
+            <item
+                android:id="@+id/rank_desc"
+                android:title="Rank Descending" />
+        </menu>
+    </item>
     <item android:title="Share this app!">
         <menu>
             <item
