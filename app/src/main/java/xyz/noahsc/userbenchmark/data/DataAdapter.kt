@@ -14,18 +14,7 @@ import xyz.noahsc.userbenchmark.R
 
 class DataAdapter(private val partsList: ArrayList<HardwareData>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
 
-    class MyViewHolder(private val ctx: Context, view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
-
-        init {
-            view.setOnClickListener(this)
-        }
-
-        override fun onClick(p0: View?) {
-
-            AlertDialog.Builder(ctx).create().apply {
-               show()
-            }
-        }
+    class MyViewHolder(private val ctx: Context, view: View): RecyclerView.ViewHolder(view) {
 
         fun bindItems(data: HardwareData) {
             val card:     CardView = this.itemView.findViewById<CardView>(R.id.cv)

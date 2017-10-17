@@ -27,5 +27,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/app_name">
         </activity>
+
+        <activity
+            android:name=".activity.ProductActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
     </application>
 </manifest>

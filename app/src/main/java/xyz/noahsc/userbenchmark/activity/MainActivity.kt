@@ -1,5 +1,6 @@
 package xyz.noahsc.userbenchmark.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -10,10 +11,12 @@ import android.widget.SearchView
 import android.support.v7.widget.*
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
+import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.mapOf
@@ -120,6 +123,15 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply { layoutManager = LinearLayoutManager(applicationContext, LinearLayout.VERTICAL, false) }
 
         findViewById<SearchView>(R.id.searchView).apply { setOnQueryTextListener(queryListener) }
+        setListener()
+    }
+
+    private fun setListener() {
+        recyclerView.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, object : RecyclerItemClickListener.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                startActivity(Intent(this@MainActivity, ProductActivity::class.java))
+            }
+        }))
     }
 
     override fun onBackPressed() {
