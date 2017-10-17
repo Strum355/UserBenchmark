@@ -1,5 +1,7 @@
 package xyz.noahsc.userbenchmark.data
 
+import android.util.Log
+
 data class HardwareData(val partNum: String,
                         val brand: String,
                         val model: String,

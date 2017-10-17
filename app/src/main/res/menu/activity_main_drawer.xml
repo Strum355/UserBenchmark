@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
@@ -40,6 +41,10 @@
             <item
                 android:id="@+id/rank_desc"
                 android:title="Rank Descending" />
+            <item
+                android:id="@+id/app_bar_switch"
+                android:title="Base Models"
+                app:actionLayout="@layout/switch_item" />
         </menu>
     </item>
     <item android:title="Share this app!">

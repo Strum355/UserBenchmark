@@ -1,7 +1,8 @@
 package xyz.noahsc.userbenchmark.data
 
-import android.annotation.TargetApi
+import android.content.Context
 import android.os.Build
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Html
@@ -13,7 +14,18 @@ import xyz.noahsc.userbenchmark.R
 
 class DataAdapter(private val partsList: ArrayList<HardwareData>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
 
-    class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class MyViewHolder(private val ctx: Context, view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
+
+        init {
+            view.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+
+            AlertDialog.Builder(ctx).create().apply {
+               show()
+            }
+        }
 
         fun bindItems(data: HardwareData) {
             val card:     CardView = this.itemView.findViewById<CardView>(R.id.cv)
@@ -45,7 +57,7 @@ class DataAdapter(private val partsList: ArrayList<HardwareData>) : RecyclerView
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.parts_list_row, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.parts_list_row, parent, false))
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) = holder.bindItems(partsList[position])
 
