@@ -9,10 +9,12 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.widget.SearchView
 import android.support.v7.widget.*
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
@@ -129,7 +131,12 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private fun setListener() {
         recyclerView.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                startActivity(Intent(this@MainActivity, ProductActivity::class.java))
+                val intent = Intent(this@MainActivity, ProductActivity::class.java)
+                intent.putExtra("rank", view.findViewById<TextView>(R.id.rank).text.toString())
+                intent.putExtra("hardware", view.findViewById<TextView>(R.id.hardware).text.toString())
+                intent.putExtra("samples", view.findViewById<TextView>(R.id.samples).text.toString())
+                intent.putExtra("perf", view.findViewById<TextView>(R.id.relative_perf).text.toString())
+                startActivity(intent)
             }
         }))
     }
