@@ -9,18 +9,21 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.widget.SearchView
 import android.support.v7.widget.*
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
 import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
+import java.io.InputStreamReader
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.collections.mapOf
 
 class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,7 +31,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private var current = ""
     // 0 - rank_asc | 1 - rank_desc
     private var state = 0
-    private var cpu: ArrayList<HardwareData> = ArrayList()
+    private var cpu: ArrayList<CPUData> = ArrayList()
     private var gpu: ArrayList<HardwareData> = ArrayList()
     private var ssd: ArrayList<HardwareData> = ArrayList()
     private var hdd: ArrayList<HardwareData> = ArrayList()
@@ -41,6 +44,8 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private var hddR: ArrayList<HardwareData> = ArrayList()
     private var usbR: ArrayList<HardwareData> = ArrayList()
     private var ramR: ArrayList<HardwareData> = ArrayList()
+
+    private var cpuMap: HashMap<String, CPUData> = HashMap<String, CPUData>()
 
     private lateinit var recyclerView: RecyclerView
 
@@ -76,19 +81,27 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     }
 
     private fun prepareLists(){
-        cpu = readCSV(files[0], applicationContext)
+        /*cpu = readCSV(files[0], applicationContext)
         gpu = readCSV(files[1], applicationContext)
         ssd = readCSV(files[2], applicationContext)
         hdd = readCSV(files[3], applicationContext)
         usb = readCSV(files[4], applicationContext)
-        ram = readCSV(files[5], applicationContext)
+        ram = readCSV(files[5], applicationContext)*/
 
-        cpuR = reverse(cpu)
+        cpuR = reverse(cpu as ArrayList<HardwareData>)
         gpuR = reverse(gpu)
         ssdR = reverse(ssd)
         hddR = reverse(hdd)
         usbR = reverse(usb)
         ramR = reverse(ram)
+    }
+
+    private fun prepareMaps(){
+        val assetManager = ctx.assets
+        val input = assetManager.open("CPU_DATA_MAP.json")
+        val cpuDataType = object:TypeToken<HashMap<String, CPUData>>(){}.type
+
+        cpuMap = Gson().fromJson(InputStreamReader(input), cpuDataType)
     }
 
     private fun reverse(l: ArrayList<HardwareData>): ArrayList<HardwareData> {
@@ -97,17 +110,23 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         return out
     }
 
+    private fun deepCopy(list: ArrayList<HardwareData>): ArrayList<HardwareData> {
+        val ret = ArrayList(list)
+        list.forEach { ret.add(it) }
+        return ret
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         prepareLists()
         stringToArray = mapOf(
-            "cpu" to arrayOf(cpu, cpuR),
-            "gpu" to arrayOf(gpu, gpuR),
-            "ssd" to arrayOf(ssd, ssdR),
-            "hdd" to arrayOf(hdd, hddR),
-            "ram" to arrayOf(ram, ramR),
-            "usb" to arrayOf(usb, usbR)
+                "cpu" to arrayOf(cpu as ArrayList<HardwareData>, cpuR),
+                "gpu" to arrayOf(gpu, gpuR),
+                "ssd" to arrayOf(ssd, ssdR),
+                "hdd" to arrayOf(hdd, hddR),
+                "ram" to arrayOf(ram, ramR),
+                "usb" to arrayOf(usb, usbR)
         )
-
+        prepareMaps()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -132,10 +151,9 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         recyclerView.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 val intent = Intent(this@MainActivity, ProductActivity::class.java)
-                intent.putExtra("rank", view.findViewById<TextView>(R.id.rank).text.toString())
-                intent.putExtra("hardware", view.findViewById<TextView>(R.id.hardware).text.toString())
-                intent.putExtra("samples", view.findViewById<TextView>(R.id.samples).text.toString())
-                intent.putExtra("perf", view.findViewById<TextView>(R.id.relative_perf).text.toString())
+                val text = view.findViewById<TextView>(R.id.hardware).text.toString()
+                val splitText = text.split(delimiters = " ", limit = 2)
+                intent.putExtra("data", cpuMap[splitText[1]])
                 startActivity(intent)
             }
         }))
@@ -156,12 +174,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
     override fun onCreateOptionsMenu(menu: Menu) = true
 
-    private fun deepCopy(list: ArrayList<HardwareData>): ArrayList<HardwareData> {
-        val ret = ArrayList<HardwareData>(list.size)
-        list.forEach { ret.add(it) }
-        return ret
-    }
-
     override fun onOptionsItemSelected(item: MenuItem) = true
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -175,7 +187,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 toolbar.title = ""
             }
             R.id.cpu -> {
-                makeHardwareDataUI(cpu)
+                makeHardwareDataUI(cpu as ArrayList<HardwareData>)
                 current = "cpu"
                 toolbar.title = "CPU"
             }
@@ -245,7 +257,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
         doAsync {
             uiThread {
-                rv.adapter = DataAdapter(filterDuplicateURLS(list))
+               rv.adapter = DataAdapter(filterDuplicateURLS(list))
             }
         }
     }

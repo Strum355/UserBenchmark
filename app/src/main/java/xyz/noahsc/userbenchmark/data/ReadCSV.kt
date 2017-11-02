@@ -6,7 +6,7 @@ import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
 import java.io.*
 
-fun readCSV(path: String, ctx: Context): ArrayList<HardwareData> {
+/*fun readCSV(path: String, ctx: Context): ArrayList<HardwareData> {
     val rows: ArrayList<HardwareData> = ArrayList()
 
     try {
@@ -29,4 +29,4 @@ fun readCSV(path: String, ctx: Context): ArrayList<HardwareData> {
     }
 
     return rows
-}
+}*/

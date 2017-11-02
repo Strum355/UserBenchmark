@@ -1,14 +1,16 @@
 package xyz.noahsc.userbenchmark.data
 
-import android.util.Log
+import com.google.gson.annotations.SerializedName
+import java.util.*
+import kotlin.collections.ArrayList
 
-data class HardwareData(val partNum: String,
-                        val brand: String,
-                        val model: String,
-                        val rank: Int,
-                        val benchmark: Float,
-                        val samples: Int,
-                        val url: String)
+open class HardwareData(@SerializedName("url") open val url: String,
+                        @SerializedName("part") open val partNum: String,
+                        @SerializedName("brand") open val brand: String,
+                        @SerializedName("rank") open val rank: Int,
+                        @SerializedName("benchmark") open val benchmark: Float,
+                        @SerializedName("samples") open val samples: Int,
+                        @SerializedName("model") open val model: String)
 
 fun filterDuplicateURLS(r: ArrayList<HardwareData>): ArrayList<HardwareData> {
     val out: ArrayList<HardwareData> = ArrayList()
@@ -30,8 +32,14 @@ fun searchForSubstring(r: ArrayList<HardwareData>, s: String): ArrayList<Hardwar
     }
 
     if(out.isEmpty()) {
-        out.add(HardwareData("","No Results","", 0, 0F, 0,""))
+        out.add(HardwareData("", "No Results", "", 0, 0F, 0, ""))
     }
 
     return out
 }
+
+
+
+
+
+

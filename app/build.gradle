@@ -31,7 +31,7 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta2'
+    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'com.android.support:recyclerview-v7:26.1.0'
 
@@ -50,7 +50,8 @@ dependencies {
     compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
 
     compile group: 'com.opencsv', name: 'opencsv', version: '4.0'
-    //    testCompile 'junit:junit:4.12'
+
+    compile 'com.google.code.gson:gson:2.8.2'
 }
 
 androidExtensions {
