@@ -2,19 +2,18 @@ package xyz.noahsc.userbenchmark.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 
-data class CPUData(@SerializedName("cores") val cores: String,
-                   @SerializedName("scores") val scores: ArrayList<String>,
-                   @SerializedName("performance") val performance: ArrayList<String>,
+data class CPUData(val cores: String,
+                   val scores: ArrayList<String>,
+                   val performance: ArrayList<String>,
 
-                   @SerializedName("url") override val url: String,
-                   @SerializedName("part") override val partNum: String,
-                   @SerializedName("brand") override val brand: String,
-                   @SerializedName("rank") override val rank: Int,
-                   @SerializedName("benchmark") override val benchmark: Float,
-                   @SerializedName("samples") override val samples: Int,
-                   @SerializedName("model") override val model: String) : Parcelable, HardwareData(url, partNum, brand, rank, benchmark, samples, model) {
+                   override val url: String,
+                   override val part: String,
+                   override val brand: String,
+                   override val rank: Int,
+                   override val benchmark: Float,
+                   override val samples: Int,
+                   override val model: String) : Parcelable, Hardware {
 
     constructor(source: Parcel) : this(
             source.readString(),
@@ -36,7 +35,7 @@ data class CPUData(@SerializedName("cores") val cores: String,
         writeStringList(scores)
         writeStringList(performance)
         writeString(url)
-        writeString(partNum)
+        writeString(part)
         writeString(brand)
         writeInt(rank)
         writeFloat(benchmark)

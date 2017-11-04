@@ -36,11 +36,11 @@
     <item android:title="Sort">
         <menu>
             <item
-                android:id="@+id/rank_asc"
-                android:title="Rank Ascending" />
-            <item
                 android:id="@+id/rank_desc"
                 android:title="Rank Descending" />
+            <item
+                android:id="@+id/rank_asc"
+                android:title="Rank Ascending" />
             <item
                 android:id="@+id/app_bar_switch"
                 android:title="Base Models"

@@ -1,19 +1,37 @@
 package xyz.noahsc.userbenchmark.data
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import java.util.*
 import kotlin.collections.ArrayList
 
-open class HardwareData(@SerializedName("url") open val url: String,
-                        @SerializedName("part") open val partNum: String,
-                        @SerializedName("brand") open val brand: String,
-                        @SerializedName("rank") open val rank: Int,
-                        @SerializedName("benchmark") open val benchmark: Float,
-                        @SerializedName("samples") open val samples: Int,
-                        @SerializedName("model") open val model: String)
+interface Hardware: Comparable<Hardware>, Parcelable {
+    val url: String
+    val part: String
+    val brand: String
+    val rank: Int
+    val benchmark: Float
+    val samples: Int
+    val model: String
 
-fun filterDuplicateURLS(r: ArrayList<HardwareData>): ArrayList<HardwareData> {
-    val out: ArrayList<HardwareData> = ArrayList()
+    override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
+}
+
+/*abstract class HardwareData(): Comparable<HardwareData>, Hardware{
+    abstract val url: String
+    abstract val part: String
+    abstract val brand: String
+    abstract val rank: Int
+    abstract val benchmark: Float
+    abstract val samples: Int
+    abstract val model: String
+
+    override fun compareTo(other: HardwareData) = compareValuesBy(this, other, { it.rank })
+}*/
+
+fun filterDuplicateURLS(r: ArrayList<Hardware>): ArrayList<Hardware> {
+    val out: ArrayList<Hardware> = ArrayList()
     r.indices.forEach {
         if(it == 0 || r[it].url != r[it-1].url){
             out.add(r[it])
@@ -23,8 +41,8 @@ fun filterDuplicateURLS(r: ArrayList<HardwareData>): ArrayList<HardwareData> {
     return out
 }
 
-fun searchForSubstring(r: ArrayList<HardwareData>, s: String): ArrayList<HardwareData> {
-    val out: ArrayList<HardwareData> = ArrayList()
+fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
+    val out: ArrayList<Hardware> = ArrayList()
     r.forEach{
         if((it.brand+it.model).contains(s, true)) {
             out.add(it)
@@ -32,7 +50,30 @@ fun searchForSubstring(r: ArrayList<HardwareData>, s: String): ArrayList<Hardwar
     }
 
     if(out.isEmpty()) {
-        out.add(HardwareData("", "No Results", "", 0, 0F, 0, ""))
+        out.add(object :Hardware{
+            override val benchmark: Float
+                get() = 0F
+            override val brand: String
+                get() = ""
+            override val model: String
+                get() = "No Results"
+            override val part: String
+                get() = ""
+            override val rank: Int
+                get() = 0
+            override val samples: Int
+                get() = 0
+            override val url: String
+                get() = ""
+
+            override fun describeContents(): Int {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun writeToParcel(p0: Parcel?, p1: Int) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     return out

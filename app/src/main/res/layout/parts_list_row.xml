@@ -70,7 +70,7 @@
                 tools:text="Samples: 534024" />
 
             <TextView
-                android:id="@+id/relative_perf"
+                android:id="@+id/relativePerf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"

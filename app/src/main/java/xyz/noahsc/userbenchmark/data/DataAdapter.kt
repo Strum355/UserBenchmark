@@ -12,11 +12,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import xyz.noahsc.userbenchmark.R
 
-class DataAdapter(private val partsList: ArrayList<HardwareData>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
+class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
 
     class MyViewHolder(private val ctx: Context, view: View): RecyclerView.ViewHolder(view) {
 
-        fun bindItems(data: HardwareData) {
+        fun bindItems(data: Hardware) {
             val card:     CardView = this.itemView.findViewById<CardView>(R.id.cv)
             val rank:     TextView = this.itemView.findViewById(R.id.rank)
             val hardware: TextView = this.itemView.findViewById(R.id.hardware)
