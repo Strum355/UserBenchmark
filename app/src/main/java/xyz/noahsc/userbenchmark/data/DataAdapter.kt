@@ -21,7 +21,7 @@ class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Ada
             val rank:     TextView = this.itemView.findViewById(R.id.rank)
             val hardware: TextView = this.itemView.findViewById(R.id.hardware)
             val sample:   TextView = this.itemView.findViewById(R.id.samples)
-            val relPerf:  TextView = this.itemView.findViewById(R.id.relative_perf)
+            val relPerf:  TextView = this.itemView.findViewById(R.id.relativePerf)
 
             var end = "th"
 

@@ -102,7 +102,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close).apply { syncState() }
         drawer.addDrawerListener(toggle)
 
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        val navigationView = findViewById<NavigationView>(R.id.navView)
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.setCheckedItem(R.id.home)
 
