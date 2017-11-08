@@ -10,10 +10,10 @@ interface Hardware: Comparable<Hardware>, Parcelable {
     val url: String
     val part: String
     val brand: String
+    val model: String
     val rank: Int
     val benchmark: Float
     val samples: Int
-    val model: String
 
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }

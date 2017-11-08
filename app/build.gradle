@@ -54,7 +54,9 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
 }
 
-androidExtensions {
-    experimental = true
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
 }
 

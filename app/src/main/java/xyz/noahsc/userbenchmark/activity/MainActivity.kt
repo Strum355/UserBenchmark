@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.widget.SearchView
 import android.support.v7.widget.*
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.parts_list_row.*
+import kotlinx.android.synthetic.main.parts_list_row.view.*
 import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
@@ -63,18 +65,18 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         val parser = Gson()
         val assetManager = ctx.assets
 
-        var input = assetManager.open("CPU_DATA_MAP.json")
+        var input = assetManager.open("CPU_MAP.json")
         val cpuDataType = object:TypeToken<HashMap<String, CPUData>>(){}.type
         cpuMap = parser.fromJson(InputStreamReader(input), cpuDataType)
 
-        input = assetManager.open("GPU_DATA_MAP.json")
+        input = assetManager.open("GPU_MAP.json")
         val gpuDataType = object:TypeToken<HashMap<String, GPUData>>(){}.type
         gpuMap = parser.fromJson(InputStreamReader(input), gpuDataType)
 
         stringToMaps = mapOf(
-                "cpu" to cpuMap,
-                "gpu" to gpuMap
-        ) as HashMap<String, HashMap<String, Hardware>>
+                "cpu" to cpuMap as HashMap<String, Hardware>,
+                "gpu" to gpuMap as HashMap<String, Hardware>
+        )
     }
 
     private fun reverse(l: ArrayList<Hardware>): ArrayList<Hardware> {
@@ -115,8 +117,9 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private fun setListener() {
         recyclerView.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, object : RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                val text = hardware.text.toString()
+                val text = view.hardware.text.toString()
                 val splitText = text.split(delimiters = " ", limit = 2)
+
                 startActivity(intentFor<ProductActivity>("data" to stringToMaps[current]!![splitText[1]]))
             }
         }))
