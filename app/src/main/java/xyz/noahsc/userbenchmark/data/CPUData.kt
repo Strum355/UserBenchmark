@@ -6,6 +6,7 @@ import android.os.Parcelable
 data class CPUData(val cores: String,
                    val scores: ArrayList<String>,
                    val performance: ArrayList<String>,
+                   val subresults: ArrayList<String>,
 
                    override val url: String,
                    override val part: String,
@@ -17,6 +18,7 @@ data class CPUData(val cores: String,
 
     constructor(source: Parcel) : this(
             source.readString(),
+            source.createStringArrayList(),
             source.createStringArrayList(),
             source.createStringArrayList(),
             source.readString(),
@@ -34,6 +36,7 @@ data class CPUData(val cores: String,
         writeString(cores)
         writeStringList(scores)
         writeStringList(performance)
+        writeStringList(subresults)
         writeString(url)
         writeString(part)
         writeString(brand)

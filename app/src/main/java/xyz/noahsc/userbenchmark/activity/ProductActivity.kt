@@ -9,6 +9,7 @@ import android.support.v7.widget.*
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
+import kotlinx.android.synthetic.main.cpu.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import xyz.noahsc.userbenchmark.data.CPUData
@@ -23,51 +24,64 @@ class ProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val data = intent.getParcelableExtra<Hardware>("data")
 
+        setContentView(R.layout.details_page)
+        findViewById<Toolbar>(R.id.title).apply{ title = "${data.brand} ${data.model}" }
+
+        val urlUnderline = SpannableString("View in Browser!").apply {
+            setSpan(UnderlineSpan(), 0, this.length, 0)
+        }
+
+        url.apply {
+            text = urlUnderline
+            onClick {
+                browse(data.url)
+            }
+        }
+
+        rank.text = "${rank.text}${data.rank}"
+
+        samples.text = "Samples: ${data.samples}"
         when(data){
             is CPUData -> asCPU(data)
             is GPUData -> asGPU(data)
         }
     }
 
-    private fun asCPU(data: CPUData){
-        setContentView(R.layout.details_page)
-        findViewById<Toolbar>(R.id.title).apply{ title = "${data.brand} ${data.model}" }
-
-        val urlUnderline = SpannableString("View in Browser!").apply {
-            setSpan(UnderlineSpan(), 0, this.length, 0)
+    private fun asCPU(data: CPUData) {
+        viewStub.apply {
+            layoutResource = R.layout.cpu
+            inflate()
         }
 
-        url.apply {
-            text = urlUnderline
-            onClick {
-                browse(data.url)
-            }
-        }
+        single_int.text = data.subresults[0]
+        single_float.text = data.subresults[1]
+        single_mixed.text = data.subresults[2]
+        quad_int.text = data.subresults[3]
+        quad_float.text = data.subresults[4]
+        quad_mixed.text = data.subresults[5]
+        multi_int.text = data.subresults[6]
+        multi_float.text = data.subresults[7]
+        multi_mixed.text = data.subresults[8]
 
-        rank.text = "${rank.text}${data.rank}"
+        single_average.apply {
+            text = data.scores[0]
+            setBackgroundResource(numberToColor(data.scores[1]))
+        }
+        quad_average.apply {
+            text = data.scores[1]
+            setBackgroundResource(numberToColor(data.scores[1]))
+        }
+        multi_average.apply {
+            text = data.scores[2]
+            setBackgroundResource(numberToColor(data.scores[1]))
+        }
     }
 
     private fun asGPU(data: GPUData) {
-        setContentView(R.layout.details_page)
-        findViewById<Toolbar>(R.id.title).apply{ title = "${data.brand} ${data.model}" }
-
-        val urlUnderline = SpannableString("View in Browser!").apply {
-            setSpan(UnderlineSpan(), 0, this.length, 0)
-        }
-
-        url.apply {
-            text = urlUnderline
-            onClick {
-                browse(data.url)
-            }
-        }
-
         viewStub.apply {
             layoutResource = R.layout.gpu
             inflate()
         }
-
-        rank.text = "${rank.text}${data.rank}"
 
         lighting.text   = data.subresults[0]
         reflection.text = data.subresults[1]

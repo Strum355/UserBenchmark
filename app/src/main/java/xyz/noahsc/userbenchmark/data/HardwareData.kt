@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import java.util.*
+import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 
 interface Hardware: Comparable<Hardware>, Parcelable {
@@ -18,26 +19,17 @@ interface Hardware: Comparable<Hardware>, Parcelable {
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
 
-/*abstract class HardwareData(): Comparable<HardwareData>, Hardware{
-    abstract val url: String
-    abstract val part: String
-    abstract val brand: String
-    abstract val rank: Int
-    abstract val benchmark: Float
-    abstract val samples: Int
-    abstract val model: String
-
-    override fun compareTo(other: HardwareData) = compareValuesBy(this, other, { it.rank })
-}*/
 
 fun filterDuplicateURLS(r: ArrayList<Hardware>): ArrayList<Hardware> {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        //return r.stream().distinct().
+    }
     val out: ArrayList<Hardware> = ArrayList()
     r.indices.forEach {
         if(it == 0 || r[it].url != r[it-1].url){
             out.add(r[it])
         }
     }
-
     return out
 }
 

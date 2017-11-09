@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:stretchColumns="0,1,2">
+    android:orientation="vertical"
+    android:stretchColumns="0,1,2"
+    android:shrinkColumns="*">
 
     <TableRow
         android:layout_width="fill_parent"
@@ -13,7 +14,7 @@
         android:background="@color/colorPrimaryDark">
 
         <TextView
-            android:id="@+id/lighting"
+            android:id="@+id/single_int"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_column="0"
@@ -27,12 +28,26 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/mrender"
+            android:id="@+id/single_float"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_column="1"
             android:layout_marginLeft="1dp"
-            android:layout_marginRight="-1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/cardview_light_background"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/single_mixed"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_marginLeft="1dp"
             android:layout_marginTop="2dp"
             android:background="@color/cardview_light_background"
             android:gravity="center"
@@ -50,7 +65,7 @@
         android:background="@color/colorPrimaryDark">
 
         <TextView
-            android:id="@+id/reflection"
+            android:id="@+id/quad_int"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_column="0"
@@ -63,12 +78,25 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/gravity"
+            android:id="@+id/quad_float"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_column="1"
             android:layout_marginLeft="1dp"
-            android:layout_marginRight="-1dp"
+            android:layout_marginRight="1dp"
+            android:background="@color/cardview_light_background"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=" Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/quad_mixed"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_marginLeft="1dp"
             android:background="@color/cardview_light_background"
             android:gravity="center"
             android:padding="5dp"
@@ -85,7 +113,7 @@
         android:background="@color/colorPrimaryDark">
 
         <TextView
-            android:id="@+id/parallax"
+            android:id="@+id/multi_int"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_column="0"
@@ -98,12 +126,25 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/splatting"
+            android:id="@+id/multi_float"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_column="1"
             android:layout_marginLeft="1dp"
-            android:layout_marginRight="-1dp"
+            android:layout_marginRight="1dp"
+            android:background="@color/cardview_light_background"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=" Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/multi_mixed"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_marginLeft="1dp"
             android:background="@color/cardview_light_background"
             android:gravity="center"
             android:padding="5dp"
@@ -117,15 +158,15 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/colorPrimaryDark">
+        android:background="#000000">
 
         <TextView
-            android:id="@+id/dx9"
+            android:id="@+id/single_average"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_column="0"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginRight="1dp"
             android:layout_marginTop="2dp"
             android:background="@color/cardview_light_background"
@@ -137,13 +178,29 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/dx10"
+            android:id="@+id/quad_average"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_column="1"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="1dp"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/cardview_light_background"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=" Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/multi_average"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="1dp"
             android:layout_marginTop="2dp"
             android:background="@color/cardview_light_background"
             android:gravity="center"

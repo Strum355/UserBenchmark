@@ -65,7 +65,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         val parser = Gson()
         val assetManager = ctx.assets
 
-        var input = assetManager.open("CPU_MAP.json")
+        var input = assetManager.open("CPU_DATA.json")
         val cpuDataType = object:TypeToken<HashMap<String, CPUData>>(){}.type
         cpuMap = parser.fromJson(InputStreamReader(input), cpuDataType)
 
