@@ -19,11 +19,7 @@ interface Hardware: Comparable<Hardware>, Parcelable {
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
 
-
 fun filterDuplicateURLS(r: ArrayList<Hardware>): ArrayList<Hardware> {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-        //return r.stream().distinct().
-    }
     val out: ArrayList<Hardware> = ArrayList()
     r.indices.forEach {
         if(it == 0 || r[it].url != r[it-1].url){

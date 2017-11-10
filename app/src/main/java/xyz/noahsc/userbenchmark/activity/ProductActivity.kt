@@ -23,7 +23,6 @@ class ProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val data = intent.getParcelableExtra<Hardware>("data")
-
         setContentView(R.layout.details_page)
         findViewById<Toolbar>(R.id.title).apply{ title = "${data.brand} ${data.model}" }
 

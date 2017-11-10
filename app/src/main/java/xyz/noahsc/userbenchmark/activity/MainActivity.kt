@@ -48,7 +48,11 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             if(newText == null || current == "" || stringToMaps[current] == null) {
                 return false
             }
-            recycler.adapter = DataAdapter(searchForSubstring(ArrayList(stringToMaps[current]!!.values as ArrayList<Hardware>), newText))
+            val searched = searchForSubstring(ArrayList<Hardware>(cpuMap.values), newText).sorted()
+            when(state) {
+                0 ->  recycler.adapter = DataAdapter(ArrayList<Hardware>(searched))
+                1 -> recycler.adapter = DataAdapter(ArrayList<Hardware>(searched.reversed()))
+            }
             return false
         }
 
@@ -56,7 +60,11 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             if(newText == null || current == "" || stringToMaps[current] == null) {
                 return false
             }
-            recycler.adapter = DataAdapter(searchForSubstring(ArrayList(stringToMaps[current]!!.values as ArrayList<Hardware>), newText))
+            val searched = searchForSubstring(ArrayList<Hardware>(cpuMap.values), newText).sorted()
+            when(state) {
+                0 ->  recycler.adapter = DataAdapter(ArrayList<Hardware>(searched))
+                1 -> recycler.adapter = DataAdapter(ArrayList<Hardware>(searched.reversed()))
+            }
             return false
         }
     }
@@ -77,18 +85,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 "cpu" to cpuMap as HashMap<String, Hardware>,
                 "gpu" to gpuMap as HashMap<String, Hardware>
         )
-    }
-
-    private fun reverse(l: ArrayList<Hardware>): ArrayList<Hardware> {
-        val out = deepCopy(l)
-        Collections.reverse(out)
-        return out
-    }
-
-    private fun deepCopy(list: ArrayList<Hardware>): ArrayList<Hardware> {
-        val ret = ArrayList(list)
-        list.forEach { ret.add(it) }
-        return ret
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,8 +115,10 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             override fun onItemClick(view: View, position: Int) {
                 val text = view.hardware.text.toString()
                 val splitText = text.split(delimiters = " ", limit = 2)
-
-                startActivity(intentFor<ProductActivity>("data" to stringToMaps[current]!![splitText[1]]))
+                val content: Hardware? = stringToMaps[current]!![splitText[1]]
+                if (content != null) {
+                    startActivity(intentFor<ProductActivity>("data" to content))
+                }
             }
         }))
     }
@@ -134,10 +132,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             super.onBackPressed()
         }
     }
-
-    override fun onCreateOptionsMenu(menu: Menu) = true
-
-    override fun onOptionsItemSelected(item: MenuItem) = true
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
