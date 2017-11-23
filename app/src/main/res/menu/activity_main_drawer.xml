@@ -41,10 +41,10 @@
             <item
                 android:id="@+id/rank_asc"
                 android:title="Rank Ascending" />
-            <item
+            <!--<item
                 android:id="@+id/app_bar_switch"
                 android:title="Base Models"
-                app:actionLayout="@layout/switch_item" />
+                app:actionLayout="@layout/switch_item" />-->
         </menu>
     </item>
     <item android:title="Share this app!">

@@ -2,9 +2,6 @@ package xyz.noahsc.userbenchmark.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import java.util.*
-import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 
 interface Hardware: Comparable<Hardware>, Parcelable {
@@ -19,16 +16,16 @@ interface Hardware: Comparable<Hardware>, Parcelable {
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
 
-fun filterDuplicateURLS(r: ArrayList<Hardware>): ArrayList<Hardware> {
-    val out: ArrayList<Hardware> = ArrayList()
-    r.indices.forEach {
-        if(it == 0 || r[it].url != r[it-1].url){
-            out.add(r[it])
+fun filterDuplicateUrls(r: ArrayList<Hardware>) {
+    //TODO use stdlib. Thought it didnt work but we'll try again
+    for(i in r.size-1 downTo 1){
+        if(r[i].url == r[i-1].url){
+            r.removeAt(i)
         }
     }
-    return out
 }
 
+//TODO optimize in-place
 fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
     val out: ArrayList<Hardware> = ArrayList()
     r.forEach{
@@ -54,16 +51,12 @@ fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
             override val url: String
                 get() = ""
 
-            override fun describeContents(): Int {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun describeContents() = 0
 
             override fun writeToParcel(p0: Parcel?, p1: Int) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
     }
-
     return out
 }
 

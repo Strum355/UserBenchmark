@@ -1,14 +1,10 @@
 package xyz.noahsc.userbenchmark.activity
 
-import android.content.Context
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.support.v7.widget.*
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.view.LayoutInflater
 import kotlinx.android.synthetic.main.cpu.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -24,7 +20,8 @@ class ProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val data = intent.getParcelableExtra<Hardware>("data")
         setContentView(R.layout.details_page)
-        findViewById<Toolbar>(R.id.title).apply{ title = "${data.brand} ${data.model}" }
+        toolbar.apply{ title = "${data.brand} ${data.model}" }
+        setSupportActionBar(toolbar)
 
         val urlUnderline = SpannableString("View in Browser!").apply {
             setSpan(UnderlineSpan(), 0, this.length, 0)

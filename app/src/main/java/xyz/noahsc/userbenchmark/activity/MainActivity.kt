@@ -35,6 +35,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private var current = ""
     // 0 - rank_asc | 1 - rank_desc
     private var state = 0
+    private var base = false
 
     private var cpuMap: HashMap<String, CPUData> = HashMap()
     private var gpuMap: HashMap<String, GPUData> = HashMap()
@@ -143,12 +144,12 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 toolbar.title = ""
             }
             R.id.cpu -> {
-                makeHardwareUI(ArrayList<Hardware>(ArrayList<Hardware>(cpuMap.values).sorted()))
+                makeHardwareUI(ArrayList<Hardware>(cpuMap.values.sorted()))
                 current = "cpu"
                 toolbar.title = "CPU"
             }
             R.id.gpu -> {
-                makeHardwareUI(ArrayList<Hardware>(ArrayList<Hardware>(gpuMap.values).sorted()))
+                makeHardwareUI(ArrayList<Hardware>(gpuMap.values.sorted()))
                 current = "gpu"
                 toolbar.title = "GPU"
             }
@@ -201,6 +202,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 makeHardwareUI(ArrayList<Hardware>(mapToList.sorted().reversed()))
                 toast("List sorted from highest to lowest rank")
             }
+            //R.id.app_bar_switch -> !base
         }
 
         drawer.closeDrawer(GravityCompat.START)
@@ -214,9 +216,10 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         }
 
         doAsync {
-            val filtered = filterDuplicateURLS(list)
+            //TODO check if this is even needed. Is input already filtered in the JSON?
+            filterDuplicateUrls(list)
             uiThread {
-               recyclerView.adapter = DataAdapter(filtered)
+               recyclerView.adapter = DataAdapter(list)
             }
         }
     }
