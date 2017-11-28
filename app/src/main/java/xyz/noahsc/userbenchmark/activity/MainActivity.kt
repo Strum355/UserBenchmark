@@ -1,5 +1,7 @@
 package xyz.noahsc.userbenchmark.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -35,7 +37,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private var current = ""
     // 0 - rank_asc | 1 - rank_desc
     private var state = 0
-    private var base = false
+    var toCompare = ""
 
     private var cpuMap: HashMap<String, CPUData> = HashMap()
     private var gpuMap: HashMap<String, GPUData> = HashMap()
@@ -51,7 +53,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             }
             val searched = searchForSubstring(ArrayList<Hardware>(cpuMap.values), newText).sorted()
             when(state) {
-                0 ->  recycler.adapter = DataAdapter(ArrayList<Hardware>(searched))
+                0 -> recycler.adapter = DataAdapter(ArrayList<Hardware>(searched))
                 1 -> recycler.adapter = DataAdapter(ArrayList<Hardware>(searched.reversed()))
             }
             return false
@@ -63,14 +65,14 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             }
             val searched = searchForSubstring(ArrayList<Hardware>(cpuMap.values), newText).sorted()
             when(state) {
-                0 ->  recycler.adapter = DataAdapter(ArrayList<Hardware>(searched))
+                0 -> recycler.adapter = DataAdapter(ArrayList<Hardware>(searched))
                 1 -> recycler.adapter = DataAdapter(ArrayList<Hardware>(searched.reversed()))
             }
             return false
         }
     }
 
-    private fun prepareMaps(){
+    private fun prepareMaps() {
         val parser = Gson()
         val assetManager = ctx.assets
 
@@ -118,10 +120,18 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 val splitText = text.split(delimiters = " ", limit = 2)
                 val content: Hardware? = stringToMaps[current]!![splitText[1]]
                 if (content != null) {
-                    startActivity(intentFor<ProductActivity>("data" to content))
+                    startActivityForResult(intentFor<ProductActivity>("data" to content, "compare" to toCompare), 1)
                 }
             }
         }))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val ret = data?.getStringExtra("compare")
+            Log.w("test", ret)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {
@@ -217,7 +227,9 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
         doAsync {
             //TODO check if this is even needed. Is input already filtered in the JSON?
-            filterDuplicateUrls(list)
+            //Turns out all duplicates were already removed as far as i could see, keeping
+            //this function just for future
+            //filterDuplicateUrls(list)
             uiThread {
                recyclerView.adapter = DataAdapter(list)
             }

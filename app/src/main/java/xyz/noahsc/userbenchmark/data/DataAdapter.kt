@@ -37,7 +37,7 @@ class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Ada
                 rank.text = "${data.rank}$end"
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
                     hardware.text = Html.fromHtml("<b>$brand</b> $model", Html.FROM_HTML_MODE_LEGACY)
-                }else {
+                } else {
                     hardware.text = Html.fromHtml("<b>$brand</b> $model")
                 }
                 sample.text  = "Samples: $samples"

@@ -1,34 +1,39 @@
 package xyz.noahsc.userbenchmark.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.*
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.widget.CompoundButton
 import kotlinx.android.synthetic.main.cpu.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import xyz.noahsc.userbenchmark.data.CPUData
 import xyz.noahsc.userbenchmark.data.GPUData
-import xyz.noahsc.userbenchmark.data.Hardware
 import xyz.noahsc.userbenchmark.R
 import kotlinx.android.synthetic.main.details_page.*
 import kotlinx.android.synthetic.main.gpu.*
+import xyz.noahsc.userbenchmark.data.Hardware
 
 class ProductActivity : AppCompatActivity() {
+
+    lateinit var toCompare: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val data = intent.getParcelableExtra<Hardware>("data")
+        toCompare = intent.getStringExtra("compare")
+
         setContentView(R.layout.details_page)
         toolbar.apply{ title = "${data.brand} ${data.model}" }
         setSupportActionBar(toolbar)
 
-        val urlUnderline = SpannableString("View in Browser!").apply {
-            setSpan(UnderlineSpan(), 0, this.length, 0)
-        }
-
         url.apply {
-            text = urlUnderline
+            text = SpannableString("View in Browser!").apply {
+                setSpan(UnderlineSpan(), 0, this.length, 0)
+            }
             onClick {
                 browse(data.url)
             }
@@ -41,6 +46,23 @@ class ProductActivity : AppCompatActivity() {
             is CPUData -> asCPU(data)
             is GPUData -> asGPU(data)
         }
+
+        checkBox.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(button: CompoundButton?, isChecked: Boolean) {
+                if (isChecked) {
+                    if (toCompare.isEmpty()){
+                        toCompare = data.model
+                    }
+                }
+            }
+        })
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.putExtra("compare", toCompare)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     private fun asCPU(data: CPUData) {
@@ -49,15 +71,15 @@ class ProductActivity : AppCompatActivity() {
             inflate()
         }
 
-        single_int.text = data.subresults[0]
+        single_int.text   = data.subresults[0]
         single_float.text = data.subresults[1]
         single_mixed.text = data.subresults[2]
-        quad_int.text = data.subresults[3]
-        quad_float.text = data.subresults[4]
-        quad_mixed.text = data.subresults[5]
-        multi_int.text = data.subresults[6]
-        multi_float.text = data.subresults[7]
-        multi_mixed.text = data.subresults[8]
+        quad_int.text     = data.subresults[3]
+        quad_float.text   = data.subresults[4]
+        quad_mixed.text   = data.subresults[5]
+        multi_int.text    = data.subresults[6]
+        multi_float.text  = data.subresults[7]
+        multi_mixed.text  = data.subresults[8]
 
         single_average.apply {
             text = data.scores[0]
