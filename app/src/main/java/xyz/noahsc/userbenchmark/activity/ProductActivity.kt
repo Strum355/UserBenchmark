@@ -52,6 +52,8 @@ class ProductActivity : AppCompatActivity() {
                 if (isChecked) {
                     if (toCompare.isEmpty()){
                         toCompare = data.model
+                    }else{
+                        startActivity(intentFor<CompareActivity>("data" to arrayOf(toCompare, data.model)))
                     }
                 }
             }
