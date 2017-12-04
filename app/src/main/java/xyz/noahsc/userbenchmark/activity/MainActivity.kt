@@ -129,7 +129,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             val ret = data?.getStringExtra("compare")
-            Log.w("test", ret)
+            toCompare = ret ?: ""
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -152,16 +152,19 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 recyclerView.adapter = null
                 current = ""
                 toolbar.title = ""
+                toCompare = ""
             }
             R.id.cpu -> {
                 makeHardwareUI(ArrayList<Hardware>(cpuMap.values.sorted()))
                 current = "cpu"
                 toolbar.title = "CPU"
+                toCompare = ""
             }
             R.id.gpu -> {
                 makeHardwareUI(ArrayList<Hardware>(gpuMap.values.sorted()))
                 current = "gpu"
                 toolbar.title = "GPU"
+                toCompare = ""
             }
            /* R.id.ssd -> {
                 makeHardwareUI(ssd)

@@ -12,7 +12,6 @@ class CompareActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val data = intent.getParcelableExtra<Hardware>("data")
         setContentView(R.layout.details_page)
-        Log.w("test", data.toString())
     }
 
     override fun onBackPressed() {

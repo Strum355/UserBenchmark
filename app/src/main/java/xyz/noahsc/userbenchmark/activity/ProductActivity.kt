@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.widget.CompoundButton
 import kotlinx.android.synthetic.main.cpu.*
 import org.jetbrains.anko.*
@@ -38,6 +39,9 @@ class ProductActivity : AppCompatActivity() {
                 browse(data.url)
             }
         }
+        if(data.model == toCompare) {
+            checkBox.isChecked = true
+        }
 
         rank.text = "${rank.text}${data.rank}"
 
@@ -53,7 +57,7 @@ class ProductActivity : AppCompatActivity() {
                     if (toCompare.isEmpty()){
                         toCompare = data.model
                     }else{
-                        startActivity(intentFor<CompareActivity>("data" to arrayOf(toCompare, data.model)))
+                        startActivityForResult(intentFor<CompareActivity>("data" to arrayOf(toCompare, data.model)), 1)
                     }
                 }
             }
