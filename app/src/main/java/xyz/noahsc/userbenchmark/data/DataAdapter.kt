@@ -2,7 +2,6 @@ package xyz.noahsc.userbenchmark.data
 
 import android.content.Context
 import android.os.Build
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Html
@@ -10,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import kotlinx.android.synthetic.main.parts_list_row.view.*
 import xyz.noahsc.userbenchmark.R
 
 class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
@@ -17,15 +17,15 @@ class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Ada
     class MyViewHolder(private val ctx: Context, view: View): RecyclerView.ViewHolder(view) {
 
         fun bindItems(data: Hardware) {
-            val card:     CardView = this.itemView.findViewById<CardView>(R.id.cv)
-            val rank:     TextView = this.itemView.findViewById(R.id.rank)
-            val hardware: TextView = this.itemView.findViewById(R.id.hardware)
-            val sample:   TextView = this.itemView.findViewById(R.id.samples)
-            val relPerf:  TextView = this.itemView.findViewById(R.id.relativePerf)
+            val card:     CardView = itemView.cv
+            val rank:     TextView = itemView.rank
+            val hardware: TextView = itemView.hardware
+            val sample:   TextView = itemView.samples
+            val relPerf:  TextView = itemView.relativePerf
 
             var end = "th"
 
-            card.radius = 10.0f
+            //card.radius = 10.0f
 
             with(data) {
                 when (data.rank % 10) {

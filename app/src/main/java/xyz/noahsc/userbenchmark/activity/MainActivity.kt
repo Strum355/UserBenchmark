@@ -37,7 +37,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private var current = ""
     // 0 - rank_asc | 1 - rank_desc
     private var state = 0
-    var toCompare = ""
+    var toCompare: Hardware? = null
 
     private var cpuMap: HashMap<String, CPUData> = HashMap()
     private var gpuMap: HashMap<String, GPUData> = HashMap()
@@ -128,8 +128,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            val ret = data?.getStringExtra("compare")
-            toCompare = ret ?: ""
+            toCompare = data?.getParcelableExtra<Hardware>("compare")
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -152,19 +151,19 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 recyclerView.adapter = null
                 current = ""
                 toolbar.title = ""
-                toCompare = ""
+                toCompare = null
             }
             R.id.cpu -> {
                 makeHardwareUI(ArrayList<Hardware>(cpuMap.values.sorted()))
                 current = "cpu"
                 toolbar.title = "CPU"
-                toCompare = ""
+                toCompare = null
             }
             R.id.gpu -> {
                 makeHardwareUI(ArrayList<Hardware>(gpuMap.values.sorted()))
                 current = "gpu"
                 toolbar.title = "GPU"
-                toCompare = ""
+                toCompare = null
             }
            /* R.id.ssd -> {
                 makeHardwareUI(ssd)

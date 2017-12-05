@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.widget.CompoundButton
 import kotlinx.android.synthetic.main.cpu.*
 import org.jetbrains.anko.*
@@ -20,12 +19,12 @@ import xyz.noahsc.userbenchmark.data.Hardware
 
 class ProductActivity : AppCompatActivity() {
 
-    lateinit var toCompare: String
+    var toCompare: Hardware? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val data = intent.getParcelableExtra<Hardware>("data")
-        toCompare = intent.getStringExtra("compare")
+        toCompare = intent.getParcelableExtra<Hardware>("compare")
 
         setContentView(R.layout.details_page)
         toolbar.apply{ title = "${data.brand} ${data.model}" }
@@ -39,13 +38,13 @@ class ProductActivity : AppCompatActivity() {
                 browse(data.url)
             }
         }
-        if(data.model == toCompare) {
+        if(data.model == toCompare?.model) {
             checkBox.isChecked = true
         }
 
-        rank.text = "${rank.text}${data.rank}"
+        detail_rank.text = "${detail_rank.text}${data.rank}"
 
-        samples.text = "Samples: ${data.samples}"
+        detail_samples.text = "Samples: ${data.samples}"
         when(data){
             is CPUData -> asCPU(data)
             is GPUData -> asGPU(data)
@@ -54,11 +53,13 @@ class ProductActivity : AppCompatActivity() {
         checkBox.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
             override fun onCheckedChanged(button: CompoundButton?, isChecked: Boolean) {
                 if (isChecked) {
-                    if (toCompare.isEmpty()){
-                        toCompare = data.model
+                    if (toCompare == null){
+                        toCompare = data
                     }else{
-                        startActivityForResult(intentFor<CompareActivity>("data" to arrayOf(toCompare, data.model)), 1)
+                        startActivityForResult(intentFor<CompareActivity>("data1" to toCompare, "data2" to data), 1)
                     }
+                }else{
+                    toCompare = null
                 }
             }
         })
@@ -71,8 +72,15 @@ class ProductActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            toCompare = null
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     private fun asCPU(data: CPUData) {
-        viewStub.apply {
+        detail_stub.apply {
             layoutResource = R.layout.cpu
             inflate()
         }
@@ -102,7 +110,7 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun asGPU(data: GPUData) {
-        viewStub.apply {
+        detail_stub.apply {
             layoutResource = R.layout.gpu
             inflate()
         }
