@@ -19,12 +19,12 @@ import xyz.noahsc.userbenchmark.data.Hardware
 
 class ProductActivity : AppCompatActivity() {
 
-    var toCompare: Hardware? = null
+    private var toCompare: Hardware? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val data = intent.getParcelableExtra<Hardware>("data")
-        toCompare = intent.getParcelableExtra<Hardware>("compare")
+        val data  = intent.getParcelableExtra("data") as Hardware
+        toCompare = intent.getParcelableExtra("compare")
 
         setContentView(R.layout.details_page)
         toolbar.apply{ title = "${data.brand} ${data.model}" }
@@ -50,17 +50,15 @@ class ProductActivity : AppCompatActivity() {
             is GPUData -> asGPU(data)
         }
 
-        checkBox.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener{
-            override fun onCheckedChanged(button: CompoundButton?, isChecked: Boolean) {
-                if (isChecked) {
-                    if (toCompare == null){
-                        toCompare = data
-                    }else{
-                        startActivityForResult(intentFor<CompareActivity>("data1" to toCompare, "data2" to data), 1)
-                    }
+        checkBox.setOnCheckedChangeListener({ _, isChecked: Boolean ->
+            if (isChecked) {
+                if (toCompare == null){
+                    toCompare = data
                 }else{
-                    toCompare = null
+                    startActivityForResult(intentFor<CompareActivity>("data1" to toCompare, "data2" to data), 1)
                 }
+            }else{
+                toCompare = null
             }
         })
     }
@@ -74,7 +72,9 @@ class ProductActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            //to reset the two choices. Will revisit this decision at a later date
             toCompare = null
+            checkBox.isChecked = false
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -85,27 +85,23 @@ class ProductActivity : AppCompatActivity() {
             inflate()
         }
 
-        single_int.text   = data.subresults[0]
-        single_float.text = data.subresults[1]
-        single_mixed.text = data.subresults[2]
-        quad_int.text     = data.subresults[3]
-        quad_float.text   = data.subresults[4]
-        quad_mixed.text   = data.subresults[5]
-        multi_int.text    = data.subresults[6]
-        multi_float.text  = data.subresults[7]
-        multi_mixed.text  = data.subresults[8]
+        with(data) {
+            arrayOf(single_int, single_float, single_mixed, quad_int, quad_float, quad_mixed, multi_int, multi_float, multi_mixed).forEachIndexed { i, v ->
+                v.text = subresults[i]
+            }
 
-        single_average.apply {
-            text = data.scores[0]
-            setBackgroundResource(numberToColor(data.scores[1]))
-        }
-        quad_average.apply {
-            text = data.scores[1]
-            setBackgroundResource(numberToColor(data.scores[1]))
-        }
-        multi_average.apply {
-            text = data.scores[2]
-            setBackgroundResource(numberToColor(data.scores[1]))
+            single_average.apply {
+                text = scores[0]
+                setBackgroundResource(numberToColor(scores[1]))
+            }
+            quad_average.apply {
+                text = scores[1]
+                setBackgroundResource(numberToColor(scores[1]))
+            }
+            multi_average.apply {
+                text = scores[2]
+                setBackgroundResource(numberToColor(scores[1]))
+            }
         }
     }
 
@@ -115,31 +111,33 @@ class ProductActivity : AppCompatActivity() {
             inflate()
         }
 
-        lighting.text   = data.subresults[0]
-        reflection.text = data.subresults[1]
-        parallax.text   = data.subresults[2]
-        mrender.text    = data.subresults[3]
-        gravity.text    = data.subresults[4]
-        splatting.text  = data.subresults[5]
+        with(data) {
+            arrayOf(lighting, reflection, parallax, mrender, gravity, splatting).forEachIndexed { i, v ->
+                v.text = subresults[i]
+            }
 
-        dx9.apply{
-            text = data.averages[0]
-            setBackgroundResource(numberToColor(data.averages[0]))
-        }
-        dx10.apply {
-            text = data.averages[1]
-            setBackgroundResource(numberToColor(data.averages[1]))
+            dx9.apply {
+                text = data.averages[0]
+                setBackgroundResource(numberToColor(data.averages[0]))
+            }
+            dx10.apply {
+                text = data.averages[1]
+                setBackgroundResource(numberToColor(data.averages[1]))
+            }
         }
     }
 }
 
 fun numberToColor(s: String): Int {
-    val num = s.split(delimiters = "%", limit = 2)[0].toFloat()
-
-    if (num < 30) {
+    try {
+        val num = s.split("%", ignoreCase = true, limit = 2)[0].toFloat()
+        if (num < 30) {
+            return R.color.red
+        }else if (num < 70) {
+            return R.color.orange
+        }
+        return R.color.green
+    } catch(e: NumberFormatException) {
         return R.color.red
-    }else if (num < 70) {
-        return R.color.orange
     }
-    return R.color.green
 }

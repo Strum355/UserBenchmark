@@ -5,13 +5,13 @@ import android.os.Parcelable
 import kotlin.collections.ArrayList
 
 interface Hardware: Comparable<Hardware>, Parcelable {
-    val url: String
-    val part: String
+    val benchmark: Float
+    val rank:    Int
+    val samples: Int
+    val url:   String
+    val part:  String
     val brand: String
     val model: String
-    val rank: Int
-    val benchmark: Float
-    val samples: Int
 
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
@@ -35,7 +35,7 @@ fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
     }
 
     if(out.isEmpty()) {
-        out.add(object :Hardware{
+        out.add(object : Hardware{
             override val benchmark: Float
                 get() = 0F
             override val brand: String
@@ -59,9 +59,3 @@ fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
     }
     return out
 }
-
-
-
-
-
-

@@ -17,15 +17,12 @@ class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Ada
     class MyViewHolder(private val ctx: Context, view: View): RecyclerView.ViewHolder(view) {
 
         fun bindItems(data: Hardware) {
-            val card:     CardView = itemView.cv
             val rank:     TextView = itemView.rank
             val hardware: TextView = itemView.hardware
             val sample:   TextView = itemView.samples
             val relPerf:  TextView = itemView.relativePerf
 
             var end = "th"
-
-            //card.radius = 10.0f
 
             with(data) {
                 when (data.rank % 10) {

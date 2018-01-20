@@ -11,7 +11,6 @@ class RecyclerItemClickListener(context: Context, private val mListener: OnItemC
     internal var mGestureDetector: GestureDetector
 
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-
     }
 
     interface OnItemClickListener {

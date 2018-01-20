@@ -31,7 +31,7 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
+    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'com.android.support:recyclerview-v7:26.1.0'
 
@@ -49,9 +49,12 @@ dependencies {
     compile "org.jetbrains.anko:anko-sdk25-coroutines:$anko_version"
     compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
 
-    compile group: 'com.opencsv', name: 'opencsv', version: '4.0'
+    compile group: 'com.opencsv', name: 'opencsv', version: '4.1'
 
     compile 'com.google.code.gson:gson:2.8.2'
+
+    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+
 }
 
 kotlin {
