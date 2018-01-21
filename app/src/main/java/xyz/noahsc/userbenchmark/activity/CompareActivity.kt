@@ -1,6 +1,7 @@
 package xyz.noahsc.userbenchmark.activity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Spannable
@@ -18,10 +19,14 @@ import kotlin.math.roundToInt
 
 class CompareActivity : AppCompatActivity() {
 
+    private lateinit var toCompare: Hardware
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val data1 = intent.getParcelableExtra<Hardware>("data1")
         val data2 = intent.getParcelableExtra<Hardware>("data2")
+        toCompare = data1
 
         setContentView(R.layout.compare_main)
 
@@ -41,7 +46,9 @@ class CompareActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(Activity.RESULT_OK)
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.putExtra("compare", toCompare)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 

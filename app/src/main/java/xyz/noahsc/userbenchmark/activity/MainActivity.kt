@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.widget.SearchView
@@ -23,6 +22,7 @@ import kotlinx.android.synthetic.main.parts_list_row.view.*
 import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
+import xyz.noahsc.userbenchmark.listener.ClickListener
 import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
 import java.io.InputStreamReader
 import kotlin.collections.ArrayList
@@ -112,20 +112,49 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     }
 
     private fun setListener() {
-        recycler.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, object : RecyclerItemClickListener.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
+        recycler.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, recycler, object : ClickListener {
+            override fun onClick(view: View, position: Int) {
                 val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
                 val content: Hardware? = stringToMaps[current]!![splitText[1]]
                 if (content != null) {
                     startActivityForResult(intentFor<ProductActivity>("data" to content, "compare" to toCompare), 1)
                 }
             }
+
+            override fun onLongClick(view: View, position: Int) {
+                if (toCompare == null) {
+                    val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
+                    toCompare = stringToMaps[current]!![splitText[1]]
+                    view.cv.setBackgroundColor(resources.getColor(R.color.selected))
+                    Log.w("test", view.javaClass.toString())
+                } else {
+                    val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
+                    startActivityForResult(intentFor<CompareActivity>("data1" to toCompare, "data2" to stringToMaps[current]!![splitText[1]]), 2)
+                }
+            }
         }))
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             toCompare = data?.getParcelableExtra("compare")
+            toCompare?.let { c ->
+                recycler.forEachChild {
+                    if (it.hardware.text.contains(c.model)) {
+                        it.cv.setBackgroundColor(resources.getColor(R.color.cardview_light_background))
+                    }
+                }
+            }
+        }else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            val prev = data?.getParcelableExtra("compare") as Hardware
+            recycler.forEachChild {
+                if (it.hardware.text.contains(prev.model)) {
+                    it.cv.setBackgroundColor(resources.getColor(R.color.cardview_light_background))
+                }
+            }
+            toCompare = null
+
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
