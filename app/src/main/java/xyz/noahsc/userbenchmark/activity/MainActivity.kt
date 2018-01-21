@@ -160,12 +160,13 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     }
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else if (searchView.isInEditMode) {
-            searchView.clearFocus()
-        } else {
-            super.onBackPressed()
+        when {
+            searchView.isInEditMode -> fun() {
+                searchView.clearFocus()
+                searchView.isIconified = true
+            }.invoke()
+            drawer.isDrawerOpen(GravityCompat.START) -> drawer.closeDrawer(GravityCompat.START)
+            !drawer.isDrawerOpen(GravityCompat.START) -> drawer.openDrawer(GravityCompat.START)
         }
     }
 
