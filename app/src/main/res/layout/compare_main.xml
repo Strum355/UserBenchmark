@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <TableLayout
         android:id="@+id/tableLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/shadow"
+        android:orientation="vertical"
         android:shrinkColumns="*"
         android:stretchColumns="*"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +25,8 @@
         <TableRow
             android:id="@+id/row0"
             android:layout_width="334dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_light_background">
 
             <TextView
                 android:id="@+id/TextView04"
@@ -42,11 +45,10 @@
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
                 android:paddingTop="10dp"
-                android:textAlignment="center"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text54"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                tools:text="Nvidia GTX 1070" />
+                android:typeface="serif" />
 
             <TextView
                 android:id="@+id/name2"
@@ -57,28 +59,31 @@
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
                 android:paddingTop="10dp"
-                android:textAlignment="center"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text54"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:typeface="serif"
-                tools:text="AMD RX 580" />
+                android:typeface="serif" />
 
         </TableRow>
 
         <TableRow
             android:id="@+id/row1"
             android:layout_width="334dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_light_background">
 
             <TextView
                 android:id="@+id/effective_speed"
-                android:layout_width="44dp"
+                android:layout_width="71dp"
                 android:layout_height="match_parent"
                 android:paddingBottom="5dp"
                 android:paddingEnd="0dp"
                 android:paddingStart="0dp"
                 android:paddingTop="5dp"
-                android:text="Effective Speed" />
+                android:text="@string/effective"
+                android:textAlignment="viewStart"
+                android:textColor="@color/text54"
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/effective_speed_1"
@@ -89,10 +94,10 @@
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
                 android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="Nvidia GTX 1070" />
+                android:textAlignment="textStart"
+                android:textColor="@color/text83"
+                android:textSize="18sp"
+                android:typeface="serif" />
 
             <TextView
                 android:id="@+id/effective_speed_2"
@@ -103,467 +108,29 @@
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
                 android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="AMD RX 580" />
+                android:textAlignment="textStart"
+                android:textColor="@color/text83"
+                android:textSize="18sp"
+                android:typeface="serif" />
 
         </TableRow>
-
-        <TableRow
-            android:id="@+id/row2"
-            android:layout_width="334dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/sc_mixed"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="SC Mixed" />
-
-            <TextView
-                android:id="@+id/sc_mixed_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:paddingBottom="10dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="Nvidia GTX 1070" />
-
-            <TextView
-                android:id="@+id/sc_mixed_2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_span="2"
-                android:paddingBottom="10dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="AMD RX 580" />
-        </TableRow>
-
-        <net.cachapa.expandablelayout.ExpandableLayout
-            android:id="@+id/expandable_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:el_duration="200"
-            app:el_expanded="true"
-            app:el_parallax="0.5">
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:shrinkColumns="*"
-                android:stretchColumns="*"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TableRow
-                    android:id="@+id/row2_in"
-                    android:layout_width="334dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/sc_int"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="SC Int" />
-
-                    <TextView
-                        android:id="@+id/sc_int_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif"
-                        tools:text="1234" />
-
-                    <TextView
-                        android:id="@+id/sc_int_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif"
-                        tools:text="2345" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/row2_in1"
-                    android:layout_width="334dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/sc_float"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="SC Float" />
-
-                    <TextView
-                        android:id="@+id/sc_float_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif"
-                        tools:text="500" />
-
-                    <TextView
-                        android:id="@+id/sc_float_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif"
-                        tools:text="456" />
-                </TableRow>
-            </TableLayout>
-        </net.cachapa.expandablelayout.ExpandableLayout>
-
-        <TableRow
-            android:id="@+id/row3"
-            android:layout_width="334dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/qc_mixed"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="QC Mixed" />
-
-            <TextView
-                android:id="@+id/qc_mixed_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:paddingBottom="10dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="Nvidia GTX 1070" />
-
-            <TextView
-                android:id="@+id/qc_mixed_2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_span="2"
-                android:paddingBottom="10dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="AMD RX 580" />
-
-        </TableRow>
-
-        <net.cachapa.expandablelayout.ExpandableLayout
-            android:id="@+id/expandable_layout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:el_duration="200"
-            app:el_expanded="false"
-            app:el_parallax="0.5">
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:shrinkColumns="*"
-                android:stretchColumns="*"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TableRow
-                    android:id="@+id/row3_in"
-                    android:layout_width="334dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/qc_int"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="QC Int" />
-
-                    <TextView
-                        android:id="@+id/qc_int_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-
-                    <TextView
-                        android:id="@+id/qc_int_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-                </TableRow>
-                <TableRow
-                    android:id="@+id/row3_in1"
-                    android:layout_width="334dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/qc_float"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="QC Float" />
-
-                    <TextView
-                        android:id="@+id/qc_float_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-
-                    <TextView
-                        android:id="@+id/qc_float_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-                </TableRow>
-            </TableLayout>
-        </net.cachapa.expandablelayout.ExpandableLayout>
-
-        <TableRow
-            android:id="@+id/row4"
-            android:layout_width="334dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/mc_mixed"
-                android:layout_width="6dp"
-                android:layout_height="match_parent"
-                android:paddingBottom="5dp"
-                android:paddingEnd="0dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:paddingStart="0dp"
-                android:paddingTop="5dp"
-                android:text="MC Mixed" />
-
-            <TextView
-                android:id="@+id/mc_mixed_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:paddingBottom="10dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="Nvidia GTX 1070" />
-
-            <TextView
-                android:id="@+id/mc_mixed_2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_span="2"
-                android:paddingBottom="10dp"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
-                android:paddingTop="10dp"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:typeface="serif"
-                tools:text="AMD RX 580" />
-
-        </TableRow>
-
-        <net.cachapa.expandablelayout.ExpandableLayout
-            android:id="@+id/expandable_layout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:el_duration="200"
-            app:el_expanded="false"
-            app:el_parallax="0.5">
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:shrinkColumns="*"
-                android:stretchColumns="*"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-                <TableRow
-                    android:id="@+id/row4_in"
-                    android:layout_width="334dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/mc_int"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="MC Int" />
-
-                    <TextView
-                        android:id="@+id/mc_int_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-
-                    <TextView
-                        android:id="@+id/mc_int_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-                </TableRow>
-                <TableRow
-                    android:id="@+id/row4_in1"
-                    android:layout_width="334dp"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/mc_float"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="MC Float" />
-
-                    <TextView
-                        android:id="@+id/mc_float_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-
-                    <TextView
-                        android:id="@+id/mc_float_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_span="2"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="0dp"
-                        android:paddingTop="10dp"
-                        android:textAlignment="center"
-                        android:textSize="12sp"
-                        android:typeface="serif" />
-                </TableRow>
-            </TableLayout>
-        </net.cachapa.expandablelayout.ExpandableLayout>
 
     </TableLayout>
 
     <ViewStub
         android:id="@+id/compare_stub"
-        android:layout_width="58dp"
-        android:layout_height="12dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout1" />
-</android.support.constraint.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout1"
+        app:layout_constraintVertical_bias="0.057" />
+
+</LinearLayout>

@@ -16,7 +16,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cv"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="match_parent"
         app:cardElevation="0dp">
 
         <android.support.constraint.ConstraintLayout
@@ -26,10 +26,9 @@
 
             <TextView
                 android:id="@+id/rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="62dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="4dp"
                 android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp"
@@ -42,17 +41,17 @@
 
             <TextView
                 android:id="@+id/hardware"
-                android:layout_width="334dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="8dp"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginStart="8dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.333"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/checkBox2"
                 app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rank"
                 app:layout_constraintVertical_bias="0.0"
                 tools:layout_constraintTop_creator="1"
@@ -60,26 +59,41 @@
 
             <TextView
                 android:id="@+id/samples"
-                android:layout_width="0dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="4dp"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/rank"
-                app:layout_constraintLeft_toRightOf="@+id/rank"
+                app:layout_constraintBottom_toTopOf="@+id/hardware"
+                app:layout_constraintStart_toEndOf="@+id/rank"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
                 tools:text="Samples: 534024" />
 
             <TextView
                 android:id="@+id/relativePerf"
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="32dp"
                 android:textSize="12sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/samples"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/samples"
                 tools:text="Relative Performance: 200%" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:buttonTint="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativePerf"
+                app:layout_constraintVertical_bias="1.0" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

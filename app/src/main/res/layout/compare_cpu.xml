@@ -1,6 +1,525 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tableLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:shrinkColumns="*"
+    android:stretchColumns="*" >
 
-</android.support.constraint.ConstraintLayout>
+    <TableRow
+        android:id="@+id/row2"
+        android:layout_width="334dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp">
+
+        <TextView
+            android:id="@+id/sc_mixed"
+            android:layout_width="71dp"
+            android:layout_height="match_parent"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="SC Mixed"
+            android:textColor="@color/text54"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/sc_mixed_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="2"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="10dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text83"
+            android:textSize="19dp"
+            android:typeface="serif" />
+
+        <TextView
+            android:id="@+id/sc_mixed_2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_span="2"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="10dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text83"
+            android:textSize="19dp"
+            android:typeface="serif" />
+    </TableRow>
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/expandable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        app:el_duration="200"
+        app:el_expanded="false"
+        app:el_parallax="0.5">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableRow
+                android:id="@+id/row2_in"
+                android:layout_width="334dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp">
+
+                <TextView
+                    android:id="@+id/sc_int"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="SC Int"
+                    android:textColor="@color/text54"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/sc_int_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif"
+                    tools:text="1234" />
+
+                <TextView
+                    android:id="@+id/sc_int_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif"
+                    tools:text="2345" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row2_in1"
+                android:layout_width="334dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp">
+
+                <TextView
+                    android:id="@+id/sc_float"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="SC Float"
+                    android:textColor="@color/text54"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/sc_float_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif"
+                    tools:text="500" />
+
+                <TextView
+                    android:id="@+id/sc_float_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif"
+                    tools:text="456" />
+            </TableRow>
+        </TableLayout>
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+    <TableRow
+        android:id="@+id/row3"
+        android:layout_width="334dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp">
+
+        <TextView
+            android:id="@+id/qc_mixed"
+            android:layout_width="71dp"
+            android:layout_height="match_parent"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="QC Mixed"
+            android:textColor="@color/text54"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/qc_mixed_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="2"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="10dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text83"
+            android:textSize="19dp"
+            android:typeface="serif" />
+
+        <TextView
+            android:id="@+id/qc_mixed_2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_span="2"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="10dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text83"
+            android:textSize="19dp"
+            android:typeface="serif" />
+
+    </TableRow>
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/expandable_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        app:el_duration="200"
+        app:el_expanded="false"
+        app:el_parallax="0.5">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableRow
+                android:id="@+id/row3_in"
+                android:layout_width="334dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp">
+
+                <TextView
+                    android:id="@+id/qc_int"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="QC Int"
+                    android:textColor="@color/text54"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/qc_int_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/qc_int_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row3_in1"
+                android:layout_width="334dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp">
+
+                <TextView
+                    android:id="@+id/qc_float"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="QC Float"
+                    android:textColor="@color/text54"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/qc_float_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/qc_float_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+            </TableRow>
+        </TableLayout>
+    </net.cachapa.expandablelayout.ExpandableLayout>
+
+    <TableRow
+        android:id="@+id/row4"
+        android:layout_width="334dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp">
+
+        <TextView
+            android:id="@+id/mc_mixed"
+            android:layout_width="71dp"
+            android:layout_height="match_parent"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="5dp"
+            android:paddingEnd="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingStart="0dp"
+            android:paddingTop="5dp"
+            android:text="MC Mixed"
+            android:textColor="@color/text54"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/mc_mixed_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="2"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="10dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text83"
+            android:textSize="19dp"
+            android:typeface="serif" />
+
+        <TextView
+            android:id="@+id/mc_mixed_2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_span="2"
+            android:background="@color/cardview_light_background"
+            android:paddingBottom="10dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="10dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/text83"
+            android:textSize="19dp"
+            android:typeface="serif" />
+
+    </TableRow>
+
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/expandable_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        app:el_duration="200"
+        app:el_expanded="false"
+        app:el_parallax="0.5">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableRow
+                android:id="@+id/row4_in"
+                android:layout_width="334dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp">
+
+                <TextView
+                    android:id="@+id/mc_int"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="MC Int"
+                    android:textColor="@color/text54"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/mc_int_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/mc_int_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/row4_in1"
+                android:layout_width="334dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp">
+
+                <TextView
+                    android:id="@+id/mc_float"
+                    android:layout_width="71dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="MC Float"
+                    android:textColor="@color/text54"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/mc_float_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/mc_float_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_span="2"
+                    android:background="@color/cardview_light_background"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text83"
+                    android:textSize="19dp"
+                    android:typeface="serif" />
+            </TableRow>
+        </TableLayout>
+    </net.cachapa.expandablelayout.ExpandableLayout>
+</TableLayout>
