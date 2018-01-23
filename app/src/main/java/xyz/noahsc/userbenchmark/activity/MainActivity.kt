@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.widget.SearchView
 import android.support.v7.widget.*
-import android.util.Log
+import android.widget.SearchView
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
@@ -18,10 +18,14 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.parts_list_row.*
 import kotlinx.android.synthetic.main.parts_list_row.view.*
-import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
+import xyz.noahsc.userbenchmark.R.color.cardview_light_background
+import xyz.noahsc.userbenchmark.R.id.*
+import xyz.noahsc.userbenchmark.R.layout.activity_main
+import xyz.noahsc.userbenchmark.R.string.*
 import xyz.noahsc.userbenchmark.listener.ClickListener
 import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
 import java.io.InputStreamReader
@@ -40,12 +44,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private var cpuMap: HashMap<String, CPUData> = HashMap()
     private var gpuMap: HashMap<String, GPUData> = HashMap()
 
-    private val recycler: RecyclerView by lazy {
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(applicationContext, LinearLayout.VERTICAL, false)
-        }
-    }
-
     var stringToMaps = mapOf<String, HashMap<String, Hardware>>()
 
     private val queryListener = object : SearchView.OnQueryTextListener {
@@ -55,8 +53,8 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             }
             val searched = searchForSubstring(ArrayList(cpuMap.values), newText).sorted()
             when(state) {
-                0 -> recycler.adapter = DataAdapter(ArrayList(searched))
-                1 -> recycler.adapter = DataAdapter(ArrayList(searched.reversed()))
+                0 -> recyclerView.adapter = DataAdapter(ArrayList(searched))
+                1 -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
             }
             return false
         }
@@ -67,8 +65,8 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             }
             val searched = searchForSubstring(ArrayList(cpuMap.values), newText).sorted()
             when(state) {
-                0 -> recycler.adapter = DataAdapter(ArrayList(searched))
-                1 -> recycler.adapter = DataAdapter(ArrayList(searched.reversed()))
+                0 -> recyclerView.adapter = DataAdapter(ArrayList(searched))
+                1 -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
             }
             return false
         }
@@ -95,25 +93,40 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     override fun onCreate(savedInstanceState: Bundle?) {
         stringToMaps = prepareMaps()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(activity_main)
 
-        val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbar).apply { title = "" }
-        setSupportActionBar(toolbar)
+        toolbar.apply {
+            title = ""
+            setSupportActionBar(this)
+        }
 
-        val toggle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close).apply { syncState() }
-        drawer.addDrawerListener(toggle)
+        ActionBarDrawerToggle(this, drawer, toolbar, navigation_drawer_open, navigation_drawer_close).apply {
+            syncState()
+            drawer.addDrawerListener(this)
+        }
 
-        val navigationView = findViewById<NavigationView>(R.id.navView)
-        navigationView.setNavigationItemSelectedListener(this)
-        navigationView.setCheckedItem(R.id.home)
+        navView.apply {
+            setNavigationItemSelectedListener(this@MainActivity)
+            setCheckedItem(home)
+        }
+
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayout.VERTICAL, false)
+        }
 
         searchView.apply { setOnQueryTextListener(queryListener) }
         setListener()
     }
 
     private fun setListener() {
-        recycler.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, recycler, object : ClickListener {
+        recyclerView.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, recyclerView, object : ClickListener {
             override fun onClick(view: View, position: Int) {
+                compareBox.setOnClickListener {
+                    toast("check")
+                    it.compareBox.isChecked = true
+                    return@setOnClickListener
+                }
+
                 val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
                 val content: Hardware? = stringToMaps[current]!![splitText[1]]
                 if (content != null) {
@@ -122,15 +135,16 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             }
 
             override fun onLongClick(view: View, position: Int) {
-                if (toCompare == null) {
+                /*if (toCompare == null) {
                     val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
                     toCompare = stringToMaps[current]!![splitText[1]]
-                    view.cv.setBackgroundColor(resources.getColor(R.color.selected))
-                    Log.w("test", view.javaClass.toString())
                 } else {
                     val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
-                    startActivityForResult(intentFor<CompareActivity>("data1" to toCompare, "data2" to stringToMaps[current]!![splitText[1]]), 2)
-                }
+                    val compare = stringToMaps[current]!![splitText[1]]
+                    if (compare != toCompare) {
+                        startActivityForResult(intentFor<CompareActivity>("data1" to toCompare, "data2" to compare), 2)
+                    }
+                }*/
             }
         }))
 
@@ -140,17 +154,17 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             toCompare = data?.getParcelableExtra("compare")
             toCompare?.let { c ->
-                recycler.forEachChild {
+                recyclerView.forEachChild {
                     if (it.hardware.text.contains(c.model)) {
-                        it.cv.setBackgroundColor(resources.getColor(R.color.cardview_light_background))
+                        it.cv.setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
                     }
                 }
             }
         }else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
             val prev = data?.getParcelableExtra("compare") as Hardware
-            recycler.forEachChild {
+            recyclerView.forEachChild {
                 if (it.hardware.text.contains(prev.model)) {
-                    it.cv.setBackgroundColor(resources.getColor(R.color.cardview_light_background))
+                    it.cv.setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
                 }
             }
             toCompare = null
@@ -172,19 +186,19 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.home -> {
-                recycler.adapter = null
+            home -> {
+                recyclerView.adapter = null
                 current = ""
                 toolbar.title = ""
                 toCompare = null
             }
-            R.id.cpu -> {
+            cpu -> {
                 makeHardwareUI(ArrayList(cpuMap.values.sorted()))
                 current = "cpu"
                 toolbar.title = "CPU"
                 toCompare = null
             }
-            R.id.gpu -> {
+            gpu -> {
                 makeHardwareUI(ArrayList(gpuMap.values.sorted()))
                 current = "gpu"
                 toolbar.title = "GPU"
@@ -210,10 +224,10 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                  current = "ram"
                  toolbar.title = "RAM"
              }*/
-            R.id.share -> {
+            share -> {
                 share("test")
             }
-            R.id.rank_desc -> {
+            rank_desc -> {
                 state = 1
                 when(current){
                     "" -> {
@@ -226,7 +240,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 makeHardwareUI(ArrayList(mapToList.sorted()))
                 toast("List sorted from lowest to highest rank")
             }
-            R.id.rank_asc -> {
+            rank_asc -> {
                 state = 0
                 when(current) {
                     "" -> {
@@ -239,7 +253,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 makeHardwareUI(ArrayList(mapToList.sorted().reversed()))
                 toast("List sorted from highest to lowest rank")
             }
-            //R.id.app_bar_switch -> !base
         }
 
         drawer.closeDrawer(GravityCompat.START)
@@ -258,7 +271,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             //this function just for future
             //filterDuplicateUrls(list)
             uiThread {*/
-                recycler.adapter = DataAdapter(list)
+                recyclerView.adapter = DataAdapter(list)
 
      /*       }
         }*/

@@ -3,6 +3,7 @@ package xyz.noahsc.userbenchmark.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -11,7 +12,10 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import kotlinx.android.synthetic.main.compare_main.*
 import kotlinx.android.synthetic.main.compare_cpu.*
-import xyz.noahsc.userbenchmark.R
+import xyz.noahsc.userbenchmark.R.color.green
+import xyz.noahsc.userbenchmark.R.color.red
+import xyz.noahsc.userbenchmark.R.layout.compare_cpu
+import xyz.noahsc.userbenchmark.R.layout.compare_main
 import xyz.noahsc.userbenchmark.data.CPUData
 import xyz.noahsc.userbenchmark.data.Hardware
 import java.text.DecimalFormat
@@ -28,20 +32,10 @@ class CompareActivity : AppCompatActivity() {
         val data2 = intent.getParcelableExtra<Hardware>("data2")
         toCompare = data1
 
-        setContentView(R.layout.compare_main)
+        setContentView(compare_main)
 
         when(data1){
             is CPUData -> asCPU(data1, data2 as CPUData)
-        }
-
-        row2.setOnClickListener {
-            expandable_layout.toggle()
-        }
-        row3.setOnClickListener{
-            expandable_layout1.toggle()
-        }
-        row4.setOnClickListener {
-            expandable_layout2.toggle()
         }
     }
 
@@ -54,7 +48,7 @@ class CompareActivity : AppCompatActivity() {
 
     private fun asCPU(data: CPUData, data1: CPUData) {
         compare_stub.apply {
-            layoutResource = R.layout.compare_cpu
+            layoutResource = compare_cpu
             inflate()
         }
 
@@ -70,16 +64,16 @@ class CompareActivity : AppCompatActivity() {
                 var col: ForegroundColorSpan? = null
 
                 when {
-                    num > num2 -> fun() {
+                    num > num2 -> {
                         span.append("  +$percent%")
                         diff[i] = -percent
-                        col = ForegroundColorSpan(resources.getColor(R.color.green))
-                    }.invoke()
-                    num < num2 -> fun() {
+                        col = ForegroundColorSpan(ContextCompat.getColor(applicationContext, green))
+                    }
+                    num < num2 -> {
                         span.append("  ${-percent}%")
                         diff[i] = percent
-                        col = ForegroundColorSpan(resources.getColor(R.color.red))
-                    }.invoke()
+                        col = ForegroundColorSpan(ContextCompat.getColor(applicationContext, red))
+                    }
                 }
                 span.setSpan(col, 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 span.setSpan(RelativeSizeSpan(0.7f), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -93,20 +87,30 @@ class CompareActivity : AppCompatActivity() {
             arrayOf(sc_int_2, sc_float_2, sc_mixed_2, qc_int_2, qc_float_2, qc_mixed_2, mc_int_2, mc_float_2, mc_mixed_2).forEachIndexed { i, v ->
                 val span = SpannableStringBuilder()
                 when {
-                    diff[i] > 0 -> fun() {
+                    diff[i] > 0 -> {
                         span.append("  +${diff[i]}%")
-                        span.setSpan(ForegroundColorSpan(resources.getColor(R.color.green)), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }.invoke()
-                    diff[i] < 0 -> fun() {
+                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext, green)), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                    diff[i] < 0 -> {
                         span.append("  ${diff[i]}%")
-                        span.setSpan(ForegroundColorSpan(resources.getColor(R.color.red)), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }.invoke()
+                        span.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext, red)), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
                 }
                 span.setSpan(RelativeSizeSpan(0.7f), 0, span.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
                 v.text = TextUtils.concat(subresults[i].split(" ")[2].replace(",", ""), span)
             }
             name2.text = "${brand} ${model}"
+        }
+
+        row2.setOnClickListener {
+            expandable_layout.toggle()
+        }
+        row3.setOnClickListener{
+            expandable_layout1.toggle()
+        }
+        row4.setOnClickListener {
+            expandable_layout2.toggle()
         }
     }
 }

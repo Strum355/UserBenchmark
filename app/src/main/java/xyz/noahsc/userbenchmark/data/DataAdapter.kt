@@ -1,8 +1,6 @@
 package xyz.noahsc.userbenchmark.data
 
-import android.content.Context
 import android.os.Build
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
@@ -10,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.parts_list_row.view.*
-import xyz.noahsc.userbenchmark.R
+import xyz.noahsc.userbenchmark.R.layout.parts_list_row
 
 class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
 
-    class MyViewHolder(private val ctx: Context, view: View): RecyclerView.ViewHolder(view) {
+    class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         fun bindItems(data: Hardware) {
             val rank:     TextView = itemView.rank
@@ -38,12 +36,12 @@ class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Ada
                     hardware.text = Html.fromHtml("<b>$brand</b> $model")
                 }
                 sample.text  = "Samples: $samples"
-                relPerf.text = "Relative Performance: $benchmark%"
+                relPerf.text = "Rel. Perf: $benchmark%"
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(parent.context, LayoutInflater.from(parent.context).inflate(R.layout.parts_list_row, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(LayoutInflater.from(parent.context).inflate(parts_list_row, parent, false))
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) = holder.bindItems(partsList[position])
 

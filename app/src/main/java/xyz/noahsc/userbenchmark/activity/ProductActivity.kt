@@ -6,15 +6,15 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.widget.CompoundButton
 import kotlinx.android.synthetic.main.cpu.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import xyz.noahsc.userbenchmark.data.CPUData
 import xyz.noahsc.userbenchmark.data.GPUData
-import xyz.noahsc.userbenchmark.R
 import kotlinx.android.synthetic.main.details_page.*
 import kotlinx.android.synthetic.main.gpu.*
+import xyz.noahsc.userbenchmark.R.color.*
+import xyz.noahsc.userbenchmark.R.layout.*
 import xyz.noahsc.userbenchmark.data.Hardware
 
 class ProductActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class ProductActivity : AppCompatActivity() {
         val data  = intent.getParcelableExtra("data") as Hardware
         toCompare = intent.getParcelableExtra("compare")
 
-        setContentView(R.layout.details_page)
+        setContentView(details_page)
         toolbar.apply{ title = "${data.brand} ${data.model}" }
         setSupportActionBar(toolbar)
 
@@ -81,7 +81,7 @@ class ProductActivity : AppCompatActivity() {
 
     private fun asCPU(data: CPUData) {
         detail_stub.apply {
-            layoutResource = R.layout.cpu
+            layoutResource = cpu
             inflate()
         }
 
@@ -107,7 +107,7 @@ class ProductActivity : AppCompatActivity() {
 
     private fun asGPU(data: GPUData) {
         detail_stub.apply {
-            layoutResource = R.layout.gpu
+            layoutResource = gpu
             inflate()
         }
 
@@ -132,12 +132,12 @@ fun numberToColor(s: String): Int {
     try {
         val num = s.split("%", ignoreCase = true, limit = 2)[0].toFloat()
         if (num < 30) {
-            return R.color.red
+            return red
         }else if (num < 70) {
-            return R.color.orange
+            return orange
         }
-        return R.color.green
+        return green
     } catch(e: NumberFormatException) {
-        return R.color.red
+        return red
     }
 }
