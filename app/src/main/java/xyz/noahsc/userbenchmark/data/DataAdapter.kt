@@ -1,6 +1,8 @@
 package xyz.noahsc.userbenchmark.data
 
 import android.os.Build
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.parts_list_row.view.*
+import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.R.layout.parts_list_row
 
 class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
@@ -15,12 +18,17 @@ class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Ada
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         fun bindItems(data: Hardware) {
+            val card:     CardView = itemView.cv
             val rank:     TextView = itemView.rank
             val hardware: TextView = itemView.hardware
             val sample:   TextView = itemView.samples
             val relPerf:  TextView = itemView.relativePerf
 
             var end = "th"
+
+            if(ComparisonData.getCompareFirst() == data) {
+                card.setCardBackgroundColor(ContextCompat.getColor(null, R.color.selected))
+            }
 
             with(data) {
                 when (data.rank % 10) {

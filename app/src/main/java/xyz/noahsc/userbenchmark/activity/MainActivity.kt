@@ -39,7 +39,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     // 0 - rank_asc
     // 1 - rank_desc
     private var state = 0
-    private var toCompare: Hardware? = null
 
     private var cpuMap: HashMap<String, CPUData> = HashMap()
     private var gpuMap: HashMap<String, GPUData> = HashMap()
@@ -130,21 +129,22 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
                 val content: Hardware? = stringToMaps[current]!![splitText[1]]
                 if (content != null) {
-                    startActivityForResult(intentFor<ProductActivity>("data" to content, "compare" to toCompare), 1)
+                    startActivityForResult(intentFor<ProductActivity>("data" to content), 1)
                 }
             }
 
             override fun onLongClick(view: View, position: Int) {
-                /*if (toCompare == null) {
+                if (ComparisonData.getCompareFirst() == null) {
                     val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
-                    toCompare = stringToMaps[current]!![splitText[1]]
+                    ComparisonData.setCompareFirst(stringToMaps[current]!![splitText[1]])
                 } else {
                     val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
                     val compare = stringToMaps[current]!![splitText[1]]
-                    if (compare != toCompare) {
-                        startActivityForResult(intentFor<CompareActivity>("data1" to toCompare, "data2" to compare), 2)
+                    if (compare != ComparisonData.getCompareFirst()) {
+                        ComparisonData.setCompareSecond(compare)
+                        startActivityForResult(intentFor<CompareActivity>(), 2)
                     }
-                }*/
+                }
             }
         }))
 
@@ -152,23 +152,22 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            toCompare = data?.getParcelableExtra("compare")
+            /*MainActivity.setCompare(data?.getParcelableExtra("compare"))
             toCompare?.let { c ->
                 recyclerView.forEachChild {
                     if (it.hardware.text.contains(c.model)) {
                         it.cv.setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
                     }
                 }
-            }
+            }*/
         }else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-            val prev = data?.getParcelableExtra("compare") as Hardware
+/*            val prev = data?.getParcelableExtra("compare") as Hardware
             recyclerView.forEachChild {
                 if (it.hardware.text.contains(prev.model)) {
                     it.cv.setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
                 }
-            }
-            toCompare = null
-
+            }*/
+            ComparisonData.setCompareFirst(null)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -190,19 +189,19 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 recyclerView.adapter = null
                 current = ""
                 toolbar.title = ""
-                toCompare = null
+                ComparisonData.setCompareFirst(null)
             }
             cpu -> {
                 makeHardwareUI(ArrayList(cpuMap.values.sorted()))
                 current = "cpu"
                 toolbar.title = "CPU"
-                toCompare = null
+                ComparisonData.setCompareFirst(null)
             }
             gpu -> {
                 makeHardwareUI(ArrayList(gpuMap.values.sorted()))
                 current = "gpu"
                 toolbar.title = "GPU"
-                toCompare = null
+                ComparisonData.setCompareFirst(null)
             }
             /* R.id.ssd -> {
                  makeHardwareUI(ssd)

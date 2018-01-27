@@ -12,27 +12,25 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import kotlinx.android.synthetic.main.compare_main.*
 import kotlinx.android.synthetic.main.compare_cpu.*
+import org.jetbrains.anko.intentFor
 import xyz.noahsc.userbenchmark.R.color.green
 import xyz.noahsc.userbenchmark.R.color.red
 import xyz.noahsc.userbenchmark.R.layout.compare_cpu
 import xyz.noahsc.userbenchmark.R.layout.compare_main
 import xyz.noahsc.userbenchmark.data.CPUData
+import xyz.noahsc.userbenchmark.data.ComparisonData
 import xyz.noahsc.userbenchmark.data.Hardware
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 class CompareActivity : AppCompatActivity() {
 
-    private lateinit var toCompare: Hardware
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val data1 = intent.getParcelableExtra<Hardware>("data1")
-        val data2 = intent.getParcelableExtra<Hardware>("data2")
-        toCompare = data1
-
         setContentView(compare_main)
+
+        val data1 = ComparisonData.getCompareFirst()
+        val data2 = ComparisonData.getCompareSecond()
 
         when(data1){
             is CPUData -> asCPU(data1, data2 as CPUData)
@@ -40,9 +38,7 @@ class CompareActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val intent = Intent(applicationContext, MainActivity::class.java)
-        intent.putExtra("compare", toCompare)
-        setResult(Activity.RESULT_OK, intent)
+        setResult(Activity.RESULT_OK, intentFor<ProductActivity>("data" to ComparisonData.getCompareSecond()))
         finish()
     }
 
