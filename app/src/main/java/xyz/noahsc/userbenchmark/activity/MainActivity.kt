@@ -121,34 +121,31 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private fun setListener() {
         recyclerView.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, recyclerView, object : ClickListener {
             override fun onClick(view: View, position: Int) {
-                compareBox.setOnClickListener {
-                    toast("check")
-                    it.compareBox.isChecked = true
-                    return@setOnClickListener
-                }
-
-                val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
-                val content: Hardware? = stringToMaps[current]!![splitText[1]]
-                if (content != null) {
-                    startActivityForResult(intentFor<ProductActivity>("data" to content), 1)
+                getHardware(view)?.let {
+                    startActivityForResult(intentFor<ProductActivity>("data" to it), 1)
                 }
             }
 
             override fun onLongClick(view: View, position: Int) {
                 if (ComparisonData.getCompareFirst() == null) {
-                    view.cv.setCardBackgroundColor(ContextCompat.getColor(view.cv.context, R.color.selected))
-                    val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
-                    ComparisonData.setCompareFirst(stringToMaps[current]!![splitText[1]])
-                    view.invalidate()
-                    toast(position.toString())
+                    view.apply {
+                        cv.setCardBackgroundColor(ContextCompat.getColor(cv.context, R.color.selected))
+                        invalidate()
+                    }
+                    ComparisonData.setCompareFirst(getHardware(view))
                 } else {
-                    val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
-                    val compare = stringToMaps[current]!![splitText[1]]
+                    val compare = getHardware(view)
                     if (compare != ComparisonData.getCompareFirst()) {
                         ComparisonData.setCompareSecond(compare)
                         startActivityForResult(intentFor<CompareActivity>(), 2)
                     }
                 }
+            }
+
+            fun getHardware(view: View): Hardware? {
+                //TODO revise, this cant be right :thinking:
+                val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
+                return stringToMaps[current]!![splitText[1]]
             }
         }))
 
@@ -159,8 +156,10 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             ComparisonData.getCompareFirst()?.let { c ->
                 recyclerView.forEachChild {
                     if (it.hardware.text.contains(c.model)) {
-                        it.cv.setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
-                        it.cv.invalidate()
+                        it.cv.apply {
+                            setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
+                            invalidate()
+                        }
                     }
                 }
             }
@@ -173,11 +172,13 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
     override fun onBackPressed() {
         when {
-            searchView.isInEditMode -> fun() {
-                searchView.clearFocus()
-                searchView.isIconified = true
-            }.invoke()
-            drawer.isDrawerOpen(GravityCompat.START) -> drawer.closeDrawer(GravityCompat.START)
+            searchView.isInEditMode -> {
+                searchView.apply {
+                    clearFocus()
+                    isIconified = true
+                }
+            }
+            drawer.isDrawerOpen(GravityCompat.START)  -> drawer.closeDrawer(GravityCompat.START)
             !drawer.isDrawerOpen(GravityCompat.START) -> drawer.openDrawer(GravityCompat.START)
         }
     }
@@ -263,15 +264,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             isIconified = true
         }
 
-      /*  doAsync {
-            //TODO check if this is even needed. Is input already filtered in the JSON?
-            //Turns out all duplicates were already removed as far as i could see, keeping
-            //this function just for future
-            //filterDuplicateUrls(list)
-            uiThread {*/
-                recyclerView.adapter = DataAdapter(list)
-
-     /*       }
-        }*/
+        recyclerView.adapter = DataAdapter(list)
     }
 }
