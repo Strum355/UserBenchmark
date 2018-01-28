@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.parts_list_row.*
 import kotlinx.android.synthetic.main.parts_list_row.view.*
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
+import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.R.color.cardview_light_background
 import xyz.noahsc.userbenchmark.R.id.*
 import xyz.noahsc.userbenchmark.R.layout.activity_main
@@ -135,8 +136,11 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
             override fun onLongClick(view: View, position: Int) {
                 if (ComparisonData.getCompareFirst() == null) {
+                    view.cv.setCardBackgroundColor(ContextCompat.getColor(view.cv.context, R.color.selected))
                     val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
                     ComparisonData.setCompareFirst(stringToMaps[current]!![splitText[1]])
+                    view.invalidate()
+                    toast(position.toString())
                 } else {
                     val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
                     val compare = stringToMaps[current]!![splitText[1]]
@@ -151,23 +155,18 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            /*MainActivity.setCompare(data?.getParcelableExtra("compare"))
-            toCompare?.let { c ->
+        if ((requestCode == 2 || requestCode == 1) && resultCode == Activity.RESULT_OK) {
+            ComparisonData.getCompareFirst()?.let { c ->
                 recyclerView.forEachChild {
                     if (it.hardware.text.contains(c.model)) {
                         it.cv.setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
+                        it.cv.invalidate()
                     }
                 }
-            }*/
-        }else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-/*            val prev = data?.getParcelableExtra("compare") as Hardware
-            recyclerView.forEachChild {
-                if (it.hardware.text.contains(prev.model)) {
-                    it.cv.setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
-                }
-            }*/
-            ComparisonData.setCompareFirst(null)
+            }
+            if (ComparisonData.getCompareSecond() != null) {
+                ComparisonData.reset()
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

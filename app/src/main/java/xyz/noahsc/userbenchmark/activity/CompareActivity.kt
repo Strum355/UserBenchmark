@@ -1,7 +1,6 @@
 package xyz.noahsc.userbenchmark.activity
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -19,7 +18,6 @@ import xyz.noahsc.userbenchmark.R.layout.compare_cpu
 import xyz.noahsc.userbenchmark.R.layout.compare_main
 import xyz.noahsc.userbenchmark.data.CPUData
 import xyz.noahsc.userbenchmark.data.ComparisonData
-import xyz.noahsc.userbenchmark.data.Hardware
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
@@ -38,7 +36,7 @@ class CompareActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(Activity.RESULT_OK, intentFor<ProductActivity>("data" to ComparisonData.getCompareSecond()))
+        setResult(Activity.RESULT_OK, intentFor<ProductActivity>())
         finish()
     }
 

@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,41 +18,44 @@ class DataAdapter(private val partsList: ArrayList<Hardware>) : RecyclerView.Ada
 
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        fun bindItems(data: Hardware) {
-            val card:     CardView = itemView.cv
-            val rank:     TextView = itemView.rank
-            val hardware: TextView = itemView.hardware
-            val sample:   TextView = itemView.samples
-            val relPerf:  TextView = itemView.relativePerf
+        fun bindItems(data: Hardware, position: Int) {
+            val rankView:     TextView = itemView.rank
+            val hardwareView: TextView = itemView.hardware
+            val sampleView:   TextView = itemView.samples
+            val relPerfView:  TextView = itemView.relativePerf
 
             var end = "th"
 
-            if(ComparisonData.getCompareFirst() == data) {
-                card.setCardBackgroundColor(ContextCompat.getColor(null, R.color.selected))
+            if ((ComparisonData.getCompareFirst() != null && position == ComparisonData.position) || ComparisonData.getCompareFirst()?.model == data.model) {
+                itemView.cv.setCardBackgroundColor(ContextCompat.getColor(itemView.cv.context, R.color.selected))
+                itemView.invalidate()
+            }else{
+                itemView.cv.setCardBackgroundColor(ContextCompat.getColor(itemView.cv.context, R.color.cardview_light_background))
+                itemView.invalidate()
             }
 
             with(data) {
-                when (data.rank % 10) {
+                when (rank % 10) {
                     1 -> end = "st"
                     2 -> end = "nd"
                     3 -> end = "rd"
                 }
 
-                rank.text = "${data.rank}$end"
+                rankView.text = "${rank}$end"
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
-                    hardware.text = Html.fromHtml("<b>$brand</b> $model", Html.FROM_HTML_MODE_LEGACY)
+                    hardwareView.text = Html.fromHtml("<b>$brand</b> $model", Html.FROM_HTML_MODE_LEGACY)
                 } else {
-                    hardware.text = Html.fromHtml("<b>$brand</b> $model")
+                    hardwareView.text = Html.fromHtml("<b>$brand</b> $model")
                 }
-                sample.text  = "Samples: $samples"
-                relPerf.text = "Rel. Perf: $benchmark%"
+                sampleView.text  = "Samples: $samples"
+                relPerfView.text = "Rel. Perf: $benchmark%"
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(LayoutInflater.from(parent.context).inflate(parts_list_row, parent, false))
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) = holder.bindItems(partsList[position])
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) = holder.bindItems(partsList[position], position)
 
     override fun getItemCount(): Int = partsList.size
 }
