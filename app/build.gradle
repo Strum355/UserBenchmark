@@ -55,6 +55,7 @@ dependencies {
 
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
+    compile 'me.xdrop:fuzzywuzzy:1.1.9'
 }
 
 kotlin {

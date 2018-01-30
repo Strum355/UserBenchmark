@@ -2,6 +2,8 @@ package xyz.noahsc.userbenchmark.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import me.xdrop.fuzzywuzzy.FuzzySearch
+import org.apache.commons.text.similarity.FuzzyScore
 import kotlin.collections.ArrayList
 
 interface Hardware: Comparable<Hardware>, Parcelable {
@@ -16,20 +18,15 @@ interface Hardware: Comparable<Hardware>, Parcelable {
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
 
-fun filterDuplicateUrls(r: ArrayList<Hardware>) {
-    //TODO use stdlib. Thought it didnt work but we'll try again
-    for(i in r.size-1 downTo 1){
-        if(r[i].url == r[i-1].url){
-            r.removeAt(i)
-        }
-    }
-}
-
 //TODO optimize in-place
 fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
+    if (s == "") {
+        return r
+    }
+
     val out: ArrayList<Hardware> = ArrayList()
     r.forEach{
-        if((it.brand+it.model).contains(s, true)) {
+        if(FuzzySearch.partialRatio(s, "${it.brand} ${it.model}") > 75) {
             out.add(it)
         }
     }
