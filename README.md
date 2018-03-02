@@ -1,6 +1,8 @@
 # UserBenchmark Android App
 
-Use [userbenchmark.com](http://userbenchmark.com) a lot? Tired of it not being mobile friendly? Then this is the app for you!  
+Use [userbenchmark.com](http://userbenchmark.com) a lot? Tired of it not being mobile friendly? Then this is the app for you! 
+
+@ userbenchmark creators: if you have any comments, concerns, questions etc, please get in contact with me. I will gladly answer/comply/whatever. You can find me on Twitter under the same username, Strum355
 
 Works alongside [Userbenchmark Scraper](https://github.com/Strum355/UserBenchmark-Scraper)  
 
