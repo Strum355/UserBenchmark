@@ -1,7 +1,11 @@
 package xyz.noahsc.userbenchmark.data
 
+import android.app.Activity
+import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.synthetic.main.details_page.*
+import kotlinx.android.synthetic.main.gpu.*
 
 data class CPUData(val cores: String,
                    val scores: ArrayList<String>,
@@ -16,7 +20,7 @@ data class CPUData(val cores: String,
                    override val samples: Int,
                    override val model: String) : Parcelable, Hardware {
 
-    constructor(source: Parcel) : this(
+    constructor(source: Parcel): this(
             source.readString(),
             source.createStringArrayList(),
             source.createStringArrayList(),

@@ -1,8 +1,10 @@
 <component name="ProjectDictionaryState">
   <dictionary name="noah">
     <words>
+      <w>linter</w>
       <w>perf</w>
-        <w>linter</w>
+      <w>subresults</w>
+      <w>userbenchmark</w>
     </words>
   </dictionary>
 </component>

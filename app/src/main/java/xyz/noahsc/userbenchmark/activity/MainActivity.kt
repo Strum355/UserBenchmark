@@ -18,8 +18,8 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.parts_list_row.*
 import kotlinx.android.synthetic.main.parts_list_row.view.*
+import kotlinx.coroutines.experimental.*
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
 import xyz.noahsc.userbenchmark.R
@@ -32,9 +32,8 @@ import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
 import java.io.InputStreamReader
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.collections.mapOf
 
-class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var current = ""
     // 0 - rank_asc
@@ -44,15 +43,15 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
     private var cpuMap: HashMap<String, CPUData> = HashMap()
     private var gpuMap: HashMap<String, GPUData> = HashMap()
 
-    var stringToMaps = mapOf<String, HashMap<String, Hardware>>()
+    var stringToMaps = hashMapOf<String, HashMap<String, Hardware>>()
 
     private val queryListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextChange(newText: String?): Boolean {
-            if(newText == null || current == "" || stringToMaps[current] == null) {
+            if (newText == null || current == "" || stringToMaps[current] == null) {
                 return false
             }
-            val searched = searchForSubstring(ArrayList(cpuMap.values), newText).sorted()
-            when(state) {
+            val searched = searchForSubstring(ArrayList(stringToMaps[current]!!.values), newText).sorted()
+            when (state) {
                 0 -> recyclerView.adapter = DataAdapter(ArrayList(searched))
                 1 -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
             }
@@ -60,11 +59,11 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         }
 
         override fun onQueryTextSubmit(newText: String?): Boolean {
-            if(newText == null || current == "" || stringToMaps[current] == null) {
+            if (newText == null || current == "" || stringToMaps[current] == null) {
                 return false
             }
-            val searched = searchForSubstring(ArrayList(cpuMap.values), newText).sorted()
-            when(state) {
+            val searched = searchForSubstring(ArrayList(stringToMaps[current]!!.values), newText).sorted()
+            when (state) {
                 0 -> recyclerView.adapter = DataAdapter(ArrayList(searched))
                 1 -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
             }
@@ -72,21 +71,21 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
         }
     }
 
-    private fun prepareMaps(): Map<String, HashMap<String, Hardware>> {
+    private fun prepareMaps(): HashMap<String, HashMap<String, Hardware>> {
         val parser = Gson()
         val assetManager = this.assets
 
         var input = assetManager.open("CPU_DATA.json")
-        val cpuDataType = object:TypeToken<HashMap<String, CPUData>>(){}.type
+        val cpuDataType = object : TypeToken<HashMap<String, CPUData>>() {}.type
         cpuMap = parser.fromJson(InputStreamReader(input), cpuDataType)
 
         input = assetManager.open("GPU_MAP.json")
-        val gpuDataType = object:TypeToken<HashMap<String, GPUData>>(){}.type
+        val gpuDataType = object : TypeToken<HashMap<String, GPUData>>() {}.type
         gpuMap = parser.fromJson(InputStreamReader(input), gpuDataType)
 
-        return mapOf(
-                "cpu" to cpuMap as HashMap<String, Hardware>,
-                "gpu" to gpuMap as HashMap<String, Hardware>
+        return hashMapOf(
+                "CPU" to cpuMap as HashMap<String, Hardware>,
+                "GPU" to gpuMap as HashMap<String, Hardware>
         )
     }
 
@@ -110,16 +109,15 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
             setCheckedItem(home)
         }
 
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(applicationContext, LinearLayout.VERTICAL, false)
-        }
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext, LinearLayout.VERTICAL, false)
 
-        searchView.apply { setOnQueryTextListener(queryListener) }
+        searchView.setOnQueryTextListener(queryListener)
         setListener()
     }
 
     private fun setListener() {
         recyclerView.addOnItemTouchListener(RecyclerItemClickListener(applicationContext, recyclerView, object : ClickListener {
+
             override fun onClick(view: View, position: Int) {
                 getHardware(view)?.let {
                     startActivityForResult(intentFor<ProductActivity>("data" to it), 1)
@@ -130,7 +128,7 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 if (ComparisonData.getCompareFirst() == null) {
                     view.apply {
                         cv.setCardBackgroundColor(ContextCompat.getColor(cv.context, R.color.selected))
-                        invalidate()
+                        recyclerView.adapter.notifyItemChanged(position)
                     }
                     ComparisonData.setCompareFirst(getHardware(view))
                 } else {
@@ -148,7 +146,6 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 return stringToMaps[current]!![splitText[1]]
             }
         }))
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -178,92 +175,80 @@ class MainActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelected
                     isIconified = true
                 }
             }
-            drawer.isDrawerOpen(GravityCompat.START)  -> drawer.closeDrawer(GravityCompat.START)
+            drawer.isDrawerOpen(GravityCompat.START) -> drawer.closeDrawer(GravityCompat.START)
             !drawer.isDrawerOpen(GravityCompat.START) -> drawer.openDrawer(GravityCompat.START)
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            home -> {
-                recyclerView.adapter = null
-                current = ""
-                toolbar.title = ""
-                ComparisonData.setCompareFirst(null)
-            }
-            cpu -> {
-                makeHardwareUI(ArrayList(cpuMap.values.sorted()))
-                current = "cpu"
-                toolbar.title = "CPU"
-                ComparisonData.setCompareFirst(null)
-            }
-            gpu -> {
-                makeHardwareUI(ArrayList(gpuMap.values.sorted()))
-                current = "gpu"
-                toolbar.title = "GPU"
-                ComparisonData.setCompareFirst(null)
-            }
-            /* R.id.ssd -> {
-                 makeHardwareUI(ssd)
-                 current = "ssd"
-                 toolbar.title = "SSD"
-             }
-             R.id.hdd -> {
-                 makeHardwareUI(hdd)
-                 current = "hdd"
-                 toolbar.title = "HDD"
-             }
-             R.id.usb -> {
-                 makeHardwareUI(usb)
-                 current = "usb"
-                 toolbar.title = "USB"
-             }
-             R.id.ram -> {
-                 makeHardwareUI(ram)
-                 current = "ram"
-                 toolbar.title = "RAM"
-             }*/
-            share -> {
-                share("test")
-            }
-            rank_desc -> {
-                state = 1
-                when(current){
-                    "" -> {
-                        toast("Must be in a hardware group!")
-                        return false
-                    }
+        drawer.closeDrawer(GravityCompat.START)
+
+        launch(CommonPool) {
+            when (item.itemId) {
+                home -> {
+                    recyclerView.adapter = null
+                    current = ""
+                    toolbar.title = ""
+                    ComparisonData.setCompareFirst(null)
                 }
-                val currMap = stringToMaps[current] as HashMap<String, Hardware>
-                val mapToList = ArrayList(currMap.values)
-                makeHardwareUI(ArrayList(mapToList.sorted()))
-                toast("List sorted from lowest to highest rank")
-            }
-            rank_asc -> {
-                state = 0
-                when(current) {
-                    "" -> {
-                        toast("Must be in a hardware group!")
-                        return false
-                    }
+                cpu -> {
+                    makeHardwareUI(ArrayList(cpuMap.values.sorted()), "CPU")
+                    ComparisonData.setCompareFirst(null)
                 }
-                val currMap = stringToMaps[current] as HashMap<String, Hardware>
-                val mapToList = ArrayList(currMap.values)
-                makeHardwareUI(ArrayList(mapToList.sorted().reversed()))
-                toast("List sorted from highest to lowest rank")
+                gpu -> {
+                    makeHardwareUI(ArrayList(gpuMap.values.sorted()), "GPU")
+                    ComparisonData.setCompareFirst(null)
+                }
+                share -> {
+                    share("test")
+                }
+                rank_desc -> {
+                    state = 1
+                    when (current) {
+                        "" -> {
+                            toast("Must be in a hardware group!")
+                            return@launch
+                        }
+                    }
+                    val currMap = stringToMaps[current] as HashMap<String, Hardware>
+                    val mapToList = ArrayList(currMap.values)
+                    makeHardwareUI(ArrayList(mapToList.sorted()), "")
+                    toast("List sorted from lowest to highest rank")
+                }
+                rank_asc -> {
+                    state = 0
+                    when (current) {
+                        "" -> {
+                            toast("Must be in a hardware group!")
+                            return@launch
+                        }
+                    }
+                    val currMap = stringToMaps[current] as HashMap<String, Hardware>
+                    val mapToList = ArrayList(currMap.values)
+                    makeHardwareUI(ArrayList(mapToList.sorted().reversed()), "")
+                    toast("List sorted from highest to lowest rank")
+                }
+                else -> {
+
+                }
             }
         }
-
-        drawer.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun makeHardwareUI(list: ArrayList<Hardware>) {
-        searchView.apply {
-            setQuery("", false)
-            isIconified = true
-        }
+    private fun makeHardwareUI(list: ArrayList<Hardware>, set: String) {
+        runOnUiThread {
+            if(set != "") {
+                toolbar.title = set
+                current = set
+            }
 
-        recyclerView.adapter = DataAdapter(list)
+            searchView.apply {
+                setQuery("", false)
+                isIconified = true
+            }
+
+            recyclerView.adapter = DataAdapter(list)
+        }
     }
 }

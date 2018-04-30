@@ -13,6 +13,7 @@ import xyz.noahsc.userbenchmark.data.CPUData
 import xyz.noahsc.userbenchmark.data.GPUData
 import kotlinx.android.synthetic.main.details_page.*
 import kotlinx.android.synthetic.main.gpu.*
+
 import xyz.noahsc.userbenchmark.R.color.*
 import xyz.noahsc.userbenchmark.R.layout.*
 import xyz.noahsc.userbenchmark.data.ComparisonData
@@ -36,6 +37,7 @@ class ProductActivity : AppCompatActivity() {
                 browse(data.url)
             }
         }
+
         if(data.model == ComparisonData.getCompareFirst()?.model) {
             checkBox.isChecked = true
         }
@@ -43,6 +45,8 @@ class ProductActivity : AppCompatActivity() {
         detail_rank.text = "${detail_rank.text} ${data.rank}"
 
         detail_samples.text = "Samples: ${data.samples}"
+
+        // TODO someday not have this here
         when(data){
             is CPUData -> asCPU(data)
             is GPUData -> asGPU(data)

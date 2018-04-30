@@ -1,12 +1,13 @@
 package xyz.noahsc.userbenchmark.data
 
+import android.app.Activity
 import android.os.Parcel
 import android.os.Parcelable
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.apache.commons.text.similarity.FuzzyScore
 import kotlin.collections.ArrayList
 
-interface Hardware: Comparable<Hardware>, Parcelable {
+interface Hardware : Comparable<Hardware>, Parcelable {
     val benchmark: Float
     val rank:    Int
     val samples: Int
@@ -26,7 +27,7 @@ fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
 
     val out: ArrayList<Hardware> = ArrayList()
     r.forEach{
-        if(FuzzySearch.partialRatio(s, "${it.brand} ${it.model}") > 75) {
+        if(FuzzySearch.partialRatio(s, "${it.brand} ${it.model}") > 80) {
             out.add(it)
         }
     }
@@ -50,8 +51,7 @@ fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
 
             override fun describeContents() = 0
 
-            override fun writeToParcel(p0: Parcel?, p1: Int) {
-            }
+            override fun writeToParcel(p0: Parcel?, p1: Int) {}
         })
     }
     return out

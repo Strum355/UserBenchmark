@@ -46,7 +46,7 @@ class CompareActivity : AppCompatActivity() {
             inflate()
         }
 
-        val diff = Array<Int>(data1.subresults.size*2, {0})
+        val diff = Array(data1.subresults.size*2, {0})
 
         with(data) {
             arrayOf(sc_int_1, sc_float_1, sc_mixed_1, qc_int_1, qc_float_1, qc_mixed_1, mc_int_1, mc_float_1, mc_mixed_1).forEachIndexed { i, v ->
