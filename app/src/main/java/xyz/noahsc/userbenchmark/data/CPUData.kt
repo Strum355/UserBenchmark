@@ -18,7 +18,7 @@ data class CPUData(val cores: String,
                    override val rank: Int,
                    override val benchmark: Float,
                    override val samples: Int,
-                   override val model: String) : Parcelable, Hardware {
+                   override val model: String) : Parcelable, Hardware() {
 
     constructor(source: Parcel): this(
             source.readString(),

@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5"
 
@@ -54,6 +55,14 @@ dependencies {
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
     implementation 'me.xdrop:fuzzywuzzy:1.1.9'
+
+    implementation 'io.arrow-kt:arrow-core:0.7.1'
+    implementation 'io.arrow-kt:arrow-syntax:0.7.1'
+    implementation 'io.arrow-kt:arrow-typeclasses:0.7.1'
+    implementation 'io.arrow-kt:arrow-data:0.7.1'
+    implementation 'io.arrow-kt:arrow-instances-core:0.7.1'
+    implementation 'io.arrow-kt:arrow-instances-data:0.7.1'
+    kapt    'io.arrow-kt:arrow-annotations-processor:0.7.1'
 }
 
 kotlin {

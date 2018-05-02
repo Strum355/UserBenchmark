@@ -13,6 +13,10 @@ import android.widget.SearchView
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import arrow.core.Option
+import arrow.core.getOrElse
+import arrow.core.monad
+import arrow.typeclasses.binding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
@@ -35,15 +39,12 @@ import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private var current = ""
-    // 0 - rank_asc
+    // 0 - rank_ascz
     // 1 - rank_desc
     private var state = 0
 
     private var cpuMap: HashMap<String, CPUData> = HashMap()
     private var gpuMap: HashMap<String, GPUData> = HashMap()
-
-    var stringToMaps = hashMapOf<String, HashMap<String, Hardware>>()
 
     private val queryListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextChange(newText: String?): Boolean {
@@ -71,26 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun prepareMaps(): HashMap<String, HashMap<String, Hardware>> {
-        val parser = Gson()
-        val assetManager = this.assets
-
-        var input = assetManager.open("CPU_DATA.json")
-        val cpuDataType = object : TypeToken<HashMap<String, CPUData>>() {}.type
-        cpuMap = parser.fromJson(InputStreamReader(input), cpuDataType)
-
-        input = assetManager.open("GPU_MAP.json")
-        val gpuDataType = object : TypeToken<HashMap<String, GPUData>>() {}.type
-        gpuMap = parser.fromJson(InputStreamReader(input), gpuDataType)
-
-        return hashMapOf(
-                "CPU" to cpuMap as HashMap<String, Hardware>,
-                "GPU" to gpuMap as HashMap<String, Hardware>
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        stringToMaps = prepareMaps()
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
 
@@ -204,29 +186,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 rank_desc -> {
                     state = 1
-                    when (current) {
-                        "" -> {
-                            toast("Must be in a hardware group!")
-                            return@launch
-                        }
+                    toast(getState().fold(
+                            {"Must be in a hardware group!"},
+                            {"List sorted from lowest to highest rank"}
+                    ))
+
+                    val state = getState().getOrElse { "" }
+
+                    Option.monad().binding {
+                        val currMap = getHardwareMap(state).bind()
+                        makeHardwareUI(ArrayList(currMap.values.sorted()), "")
                     }
-                    val currMap = stringToMaps[current] as HashMap<String, Hardware>
-                    val mapToList = ArrayList(currMap.values)
-                    makeHardwareUI(ArrayList(mapToList.sorted()), "")
-                    toast("List sorted from lowest to highest rank")
                 }
                 rank_asc -> {
                     state = 0
-                    when (current) {
-                        "" -> {
-                            toast("Must be in a hardware group!")
-                            return@launch
-                        }
-                    }
-                    val currMap = stringToMaps[current] as HashMap<String, Hardware>
+                    toast(getState().fold(
+                            {"Must be in a hardware group!"},
+                            {"List sorted from highest to lowest rank"}
+                    ))
+                    val currMap = HardwareMaps.stringToMaps[getSta] as HashMap<String, Hardware>
                     val mapToList = ArrayList(currMap.values)
                     makeHardwareUI(ArrayList(mapToList.sorted().reversed()), "")
-                    toast("List sorted from highest to lowest rank")
                 }
                 else -> {
 

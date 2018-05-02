@@ -16,6 +16,12 @@ interface Hardware : Comparable<Hardware>, Parcelable {
     val brand: String
     val model: String
 
+    companion object {
+        fun stuff() {
+            
+        }
+    }
+
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
 
@@ -25,12 +31,9 @@ fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
         return r
     }
 
-    val out: ArrayList<Hardware> = ArrayList()
-    r.forEach{
-        if(FuzzySearch.partialRatio(s, "${it.brand} ${it.model}") > 80) {
-            out.add(it)
-        }
-    }
+    val out = r.filter {
+        FuzzySearch.partialRatio(s, "${it.brand} ${it.model}") > 80
+    } as ArrayList<Hardware>
 
     if(out.isEmpty()) {
         out.add(object : Hardware{
