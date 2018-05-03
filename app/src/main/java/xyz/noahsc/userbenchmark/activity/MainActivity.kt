@@ -13,12 +13,8 @@ import android.widget.SearchView
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
-import arrow.core.Option
-import arrow.core.getOrElse
-import arrow.core.monad
+import arrow.core.*
 import arrow.typeclasses.binding
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -33,40 +29,39 @@ import xyz.noahsc.userbenchmark.R.layout.activity_main
 import xyz.noahsc.userbenchmark.R.string.*
 import xyz.noahsc.userbenchmark.listener.ClickListener
 import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
-import java.io.InputStreamReader
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    // 0 - rank_ascz
-    // 1 - rank_desc
-    private var state = 0
-
-    private var cpuMap: HashMap<String, CPUData> = HashMap()
-    private var gpuMap: HashMap<String, GPUData> = HashMap()
-
     private val queryListener = object : SearchView.OnQueryTextListener {
+
         override fun onQueryTextChange(newText: String?): Boolean {
-            if (newText == null || current == "" || stringToMaps[current] == null) {
+            val hardwareMap = getHardwareMap(getStateString())
+
+            if (newText == null || hardwareMap == None) {
                 return false
             }
-            val searched = searchForSubstring(ArrayList(stringToMaps[current]!!.values), newText).sorted()
-            when (state) {
-                0 -> recyclerView.adapter = DataAdapter(ArrayList(searched))
-                1 -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
+
+            val searched = searchForSubstring(ArrayList(hardwareMap.orNull()!!.values), newText).sorted()
+            when (getSorting()) {
+                Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched))
+                Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
             }
             return false
         }
 
         override fun onQueryTextSubmit(newText: String?): Boolean {
-            if (newText == null || current == "" || stringToMaps[current] == null) {
+            val hardwareMap = getHardwareMap(getStateString())
+
+            if (newText == null || hardwareMap == None) {
                 return false
             }
-            val searched = searchForSubstring(ArrayList(stringToMaps[current]!!.values), newText).sorted()
-            when (state) {
-                0 -> recyclerView.adapter = DataAdapter(ArrayList(searched))
-                1 -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
+
+            val searched = searchForSubstring(ArrayList(hardwareMap.orNull()!!.values), newText).sorted()
+            when (getSorting()) {
+                Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched))
+                Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
             }
             return false
         }
@@ -125,12 +120,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             fun getHardware(view: View): Hardware? {
                 //TODO revise, this cant be right :thinking:
                 val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
-                return stringToMaps[current]!![splitText[1]]
+                return getHardwareMap(getStateString()).orNull()!![splitText[1]]
             }
         }))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        /*
+            1 = from details
+            2 = from comparison
+         */
         if ((requestCode == 2 || requestCode == 1) && resultCode == Activity.RESULT_OK) {
             ComparisonData.getCompareFirst()?.let { c ->
                 recyclerView.forEachChild {
@@ -165,64 +164,83 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         drawer.closeDrawer(GravityCompat.START)
 
+        //TODO clean up this godawful mess
+
         launch(CommonPool) {
             when (item.itemId) {
                 home -> {
                     recyclerView.adapter = null
-                    current = ""
-                    toolbar.title = ""
+                    updateState("")
                     ComparisonData.setCompareFirst(null)
                 }
                 cpu -> {
-                    makeHardwareUI(ArrayList(cpuMap.values.sorted()), "CPU")
+                    updateState("CPU")
+                    makeHardwareUI(ArrayList(getHardwareMap(getStateString()).orNull()!!.values.sorted()))
                     ComparisonData.setCompareFirst(null)
                 }
                 gpu -> {
-                    makeHardwareUI(ArrayList(gpuMap.values.sorted()), "GPU")
+                    updateState("GPU")
+                    makeHardwareUI(ArrayList(getHardwareMap(getStateString()).orNull()!!.values.sorted()))
                     ComparisonData.setCompareFirst(null)
                 }
                 share -> {
-                    share("test")
+                    runOnUiThread {
+                        share("test")
+                    }
                 }
+
+                //TODO DRY code pls
+
                 rank_desc -> {
-                    state = 1
-                    toast(getState().fold(
-                            {"Must be in a hardware group!"},
-                            {"List sorted from lowest to highest rank"}
-                    ))
+                    getSorting().descending()
 
-                    val state = getState().getOrElse { "" }
+                    val text =  Option.monad().binding {
+                        val state = getState().bind()
+                        val map = getHardwareMap(state).bind()
+                        makeHardwareUI(ArrayList(map.values.sorted().reversed()))
+                        getState().bind()
+                    }.fix().fold(
+                        {"Must be in a hardware group!"},
+                        {"List sorted from lowest to highest rank"}
+                    )
 
-                    Option.monad().binding {
-                        val currMap = getHardwareMap(state).bind()
-                        makeHardwareUI(ArrayList(currMap.values.sorted()), "")
+                    runOnUiThread {
+                        toast(text)
                     }
                 }
                 rank_asc -> {
-                    state = 0
-                    toast(getState().fold(
-                            {"Must be in a hardware group!"},
-                            {"List sorted from highest to lowest rank"}
-                    ))
-                    val currMap = HardwareMaps.stringToMaps[getSta] as HashMap<String, Hardware>
-                    val mapToList = ArrayList(currMap.values)
-                    makeHardwareUI(ArrayList(mapToList.sorted().reversed()), "")
-                }
-                else -> {
+                    getSorting().ascending()
 
+                    val text = Option.monad().binding {
+                        val state = getState().bind()
+                        val map = getHardwareMap(state).bind()
+                        makeHardwareUI(ArrayList(map.values.sorted()))
+                        getState().bind()
+                    }.fix().fold(
+                        {"Must be in a hardware group!"},
+                        {"List sorted from highest to lowest rank"}
+                    )
+
+                    runOnUiThread {
+                        toast(text)
+                    }
                 }
             }
         }
         return true
     }
 
-    private fun makeHardwareUI(list: ArrayList<Hardware>, set: String) {
-        runOnUiThread {
-            if(set != "") {
-                toolbar.title = set
-                current = set
-            }
+    private fun updateState(state: String) {
+        if(state == "") {
+            return
+        }
 
+        toolbar.title = state
+        setState(state)
+    }
+
+    private fun makeHardwareUI(list: ArrayList<Hardware>) {
+        runOnUiThread {
             searchView.apply {
                 setQuery("", false)
                 isIconified = true

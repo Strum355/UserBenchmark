@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.kotlin.android.extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
@@ -13,7 +14,6 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -62,7 +62,7 @@ dependencies {
     implementation 'io.arrow-kt:arrow-data:0.7.1'
     implementation 'io.arrow-kt:arrow-instances-core:0.7.1'
     implementation 'io.arrow-kt:arrow-instances-data:0.7.1'
-    kapt    'io.arrow-kt:arrow-annotations-processor:0.7.1'
+    kapt           'io.arrow-kt:arrow-annotations-processor:0.7.1'
 }
 
 kotlin {
