@@ -9,6 +9,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
+import android.util.Log
 import android.widget.SearchView
 import android.view.MenuItem
 import android.view.View
@@ -30,35 +31,34 @@ import xyz.noahsc.userbenchmark.R.string.*
 import xyz.noahsc.userbenchmark.listener.ClickListener
 import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val queryListener = object : SearchView.OnQueryTextListener {
 
         override fun onQueryTextChange(newText: String?): Boolean {
-            val hardwareMap = getHardwareMap(getStateString())
+            val hardwareList = getHardwareMap(getStateString())
 
-            if (newText == null || hardwareMap == None) {
+            if (newText == null || hardwareList == None) {
                 return false
             }
 
-            val searched = searchForSubstring(ArrayList(hardwareMap.orNull()!!.values), newText).sorted()
+            val searched = searchForSubstring(hardwareList.orNull()!!, newText)
             when (getSorting()) {
-                Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched))
-                Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
+                Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(searched)
+                Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(searched.reversed())
             }
             return false
         }
 
         override fun onQueryTextSubmit(newText: String?): Boolean {
-            val hardwareMap = getHardwareMap(getStateString())
+            val hardwareList = getHardwareMap(getStateString())
 
-            if (newText == null || hardwareMap == None) {
+            if (newText == null || hardwareList == None) {
                 return false
             }
 
-            val searched = searchForSubstring(ArrayList(hardwareMap.orNull()!!.values), newText).sorted()
+            val searched = searchForSubstring(hardwareList.orNull()!!, newText)
             when (getSorting()) {
                 Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched))
                 Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
@@ -118,9 +118,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             fun getHardware(view: View): Hardware? {
-                //TODO revise, this cant be right :thinking:
-                val splitText = view.hardware.text.toString().split(" ", ignoreCase = true, limit = 2)
-                return getHardwareMap(getStateString()).orNull()!![splitText[1]]
+                val extractNum = Regex("([0-9])")
+                val rank = Integer.parseInt(extractNum.find(view.rank.text.toString())!!.value)
+                return getHardwareMap(getStateString()).orNull()!![rank]
             }
         }))
     }
@@ -175,12 +175,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 cpu -> {
                     updateState("CPU")
-                    makeHardwareUI(ArrayList(getHardwareMap(getStateString()).orNull()!!.values.sorted()))
+                    makeHardwareUI(getHardwareMap(getStateString()).orNull()!!)
                     ComparisonData.setCompareFirst(null)
                 }
                 gpu -> {
                     updateState("GPU")
-                    makeHardwareUI(ArrayList(getHardwareMap(getStateString()).orNull()!!.values.sorted()))
+                    makeHardwareUI(getHardwareMap(getStateString()).orNull()!!)
                     ComparisonData.setCompareFirst(null)
                 }
                 share -> {
@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val text =  Option.monad().binding {
                         val state = getState().bind()
                         val map = getHardwareMap(state).bind()
-                        makeHardwareUI(ArrayList(map.values.sorted().reversed()))
+                        makeHardwareUI(map.reversed())
                         getState().bind()
                     }.fix().fold(
                         {"Must be in a hardware group!"},
@@ -214,7 +214,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val text = Option.monad().binding {
                         val state = getState().bind()
                         val map = getHardwareMap(state).bind()
-                        makeHardwareUI(ArrayList(map.values.sorted()))
+                        makeHardwareUI(map)
                         getState().bind()
                     }.fix().fold(
                         {"Must be in a hardware group!"},
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setState(state)
     }
 
-    private fun makeHardwareUI(list: ArrayList<Hardware>) {
+    private fun makeHardwareUI(list: List<Hardware>) {
         runOnUiThread {
             searchView.apply {
                 setQuery("", false)

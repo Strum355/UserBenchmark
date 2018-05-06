@@ -49,7 +49,9 @@ class CompareActivity : AppCompatActivity() {
         val diff = Array(data1.subresults.size*2, {0})
 
         with(data) {
-            arrayOf(sc_int_1, sc_float_1, sc_mixed_1, qc_int_1, qc_float_1, qc_mixed_1, mc_int_1, mc_float_1, mc_mixed_1).forEachIndexed { i, v ->
+            arrayOf(sc_int_1, sc_float_1, sc_mixed_1,
+                    qc_int_1, qc_float_1, qc_mixed_1,
+                    mc_int_1, mc_float_1, mc_mixed_1).forEachIndexed { i, v ->
                 val num = subresults[i].split(" ")[2].replace(",", "").toFloat()
                 val num2 = data1.subresults[i].split(" ")[2].replace(",", "").toFloat()
 
@@ -78,7 +80,9 @@ class CompareActivity : AppCompatActivity() {
         }
 
         with(data1) {
-            arrayOf(sc_int_2, sc_float_2, sc_mixed_2, qc_int_2, qc_float_2, qc_mixed_2, mc_int_2, mc_float_2, mc_mixed_2).forEachIndexed { i, v ->
+            arrayOf(sc_int_2, sc_float_2, sc_mixed_2,
+                    qc_int_2, qc_float_2, qc_mixed_2,
+                    mc_int_2, mc_float_2, mc_mixed_2).forEachIndexed { i, v ->
                 val span = SpannableStringBuilder()
                 when {
                     diff[i] > 0 -> {

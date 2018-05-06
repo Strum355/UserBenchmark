@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.apache.commons.text.similarity.FuzzyScore
+import xyz.noahsc.userbenchmark.activity.ProductActivity
 import kotlin.collections.ArrayList
 
 interface Hardware : Comparable<Hardware>, Parcelable {
@@ -16,19 +17,14 @@ interface Hardware : Comparable<Hardware>, Parcelable {
     val brand: String
     val model: String
 
-    companion object {
-        fun stuff() {
-            
-        }
-    }
+    fun applyDetails(prod: ProductActivity)
 
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
 
-//TODO optimize in-place
-fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
+fun searchForSubstring(r: List<Hardware>, s: String): ArrayList<Hardware> {
     if (s == "") {
-        return r
+        return r as ArrayList<Hardware>
     }
 
     val out = r.filter {
@@ -52,8 +48,8 @@ fun searchForSubstring(r: ArrayList<Hardware>, s: String): ArrayList<Hardware> {
             override val url: String
                 get() = ""
 
+            override fun applyDetails(prod: ProductActivity) {}
             override fun describeContents() = 0
-
             override fun writeToParcel(p0: Parcel?, p1: Int) {}
         })
     }

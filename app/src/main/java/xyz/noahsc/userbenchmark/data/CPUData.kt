@@ -1,11 +1,12 @@
 package xyz.noahsc.userbenchmark.data
 
-import android.app.Activity
-import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.android.synthetic.main.cpu.*
 import kotlinx.android.synthetic.main.details_page.*
-import kotlinx.android.synthetic.main.gpu.*
+import xyz.noahsc.userbenchmark.R
+import xyz.noahsc.userbenchmark.activity.ProductActivity
+import xyz.noahsc.userbenchmark.activity.numberToColor
 
 data class CPUData(val cores: String,
                    val scores: ArrayList<String>,
@@ -19,6 +20,32 @@ data class CPUData(val cores: String,
                    override val benchmark: Float,
                    override val samples: Int,
                    override val model: String) : Parcelable, Hardware {
+
+    override fun applyDetails(prod: ProductActivity) {
+        prod.detail_stub.apply {
+            layoutResource = R.layout.cpu
+            inflate()
+        }
+
+        with(this) {
+            arrayOf(prod.single_int, prod.single_float, prod.single_mixed, prod.quad_int, prod.quad_float, prod.quad_mixed, prod.multi_int, prod.multi_float, prod.multi_mixed).forEachIndexed { i, v ->
+                v.text = subresults[i]
+            }
+
+            prod.single_average.apply {
+                text = scores[0]
+                setBackgroundResource(numberToColor(scores[1]))
+            }
+            prod.quad_average.apply {
+                text = scores[1]
+                setBackgroundResource(numberToColor(scores[1]))
+            }
+            prod.multi_average.apply {
+                text = scores[2]
+                setBackgroundResource(numberToColor(scores[1]))
+            }
+        }
+    }
 
     constructor(source: Parcel): this(
             source.readString(),

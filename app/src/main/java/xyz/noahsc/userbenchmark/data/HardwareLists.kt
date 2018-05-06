@@ -8,18 +8,22 @@ import arrow.core.getOrElse
 import com.google.gson.Gson
 import java.io.InputStreamReader
 import java.lang.reflect.Type
+import java.util.*
 
-private val stringToMaps = HashMap<String, HashMap<String, Hardware>>()
+private val stringToMaps = HashMap<String, ArrayList<Hardware>>()
 
 private var state = ""
 private var sorting = Sorting.ASCENDING
 
-fun prepareMap(assetManager: AssetManager, hardwareClasses: Array<Pair<String, Type>>) {
+fun prepareLists(assetManager: AssetManager, hardwareClasses: Array<Pair<String, Type>>) {
     val parser = Gson()
 
     hardwareClasses.forEach {
         val input = assetManager.open(it.first)
-        stringToMaps[it.first.substring(0..2)] = parser.fromJson(InputStreamReader(input), it.second) as HashMap<String, Hardware>
+        (parser.fromJson(InputStreamReader(input), it.second) as ArrayList<Hardware>).let { l ->
+            l.sort()
+            stringToMaps[it.first.substring(0..2)] = l
+        }
     }
 }
 
