@@ -1,10 +1,8 @@
 package xyz.noahsc.userbenchmark.data
 
-import android.app.Activity
 import android.os.Parcel
 import android.os.Parcelable
 import me.xdrop.fuzzywuzzy.FuzzySearch
-import org.apache.commons.text.similarity.FuzzyScore
 import xyz.noahsc.userbenchmark.activity.ProductActivity
 import kotlin.collections.ArrayList
 
@@ -22,7 +20,7 @@ interface Hardware : Comparable<Hardware>, Parcelable {
     override fun compareTo(other: Hardware) = compareValuesBy(this, other, { it.rank })
 }
 
-fun searchForSubstring(r: List<Hardware>, s: String): ArrayList<Hardware> {
+fun searchForSubstring(r: List<Hardware>, s: String) : ArrayList<Hardware> {
     if (s == "") {
         return r as ArrayList<Hardware>
     }

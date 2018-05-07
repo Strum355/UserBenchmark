@@ -9,6 +9,7 @@ import xyz.noahsc.userbenchmark.data.GPUData
 import xyz.noahsc.userbenchmark.data.prepareLists
 
 class SplashActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -17,7 +18,7 @@ class SplashActivity : AppCompatActivity() {
                 Pair("GPU_DATA.json", object : TypeToken<ArrayList<GPUData>>() {}.type)
         ))
 
-        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }

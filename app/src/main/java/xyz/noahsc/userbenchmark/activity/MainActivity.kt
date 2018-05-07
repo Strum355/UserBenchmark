@@ -23,45 +23,35 @@ import kotlinx.android.synthetic.main.parts_list_row.view.*
 import kotlinx.coroutines.experimental.*
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
-import xyz.noahsc.userbenchmark.R
-import xyz.noahsc.userbenchmark.R.color.cardview_light_background
+import xyz.noahsc.userbenchmark.R.color.*
 import xyz.noahsc.userbenchmark.R.id.*
 import xyz.noahsc.userbenchmark.R.layout.activity_main
 import xyz.noahsc.userbenchmark.R.string.*
 import xyz.noahsc.userbenchmark.listener.ClickListener
 import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val queryListener = object : SearchView.OnQueryTextListener {
 
         override fun onQueryTextChange(newText: String?): Boolean {
-            val hardwareList = getHardwareMap(getStateString())
-
-            if (newText == null || hardwareList == None) {
-                return false
-            }
-
-            val searched = searchForSubstring(hardwareList.orNull()!!, newText)
-            when (getSorting()) {
-                Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(searched)
-                Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(searched.reversed())
-            }
-            return false
+            // Currently dont need different behaviour
+            return onQueryTextSubmit(newText)
         }
 
         override fun onQueryTextSubmit(newText: String?): Boolean {
-            val hardwareList = getHardwareMap(getStateString())
+            newText?.run {
+                val hardwareList = getHardwareMap(getStateString())
 
-            if (newText == null || hardwareList == None) {
-                return false
-            }
+                if (hardwareList == None) {
+                    return false
+                }
 
-            val searched = searchForSubstring(hardwareList.orNull()!!, newText)
-            when (getSorting()) {
-                Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched))
-                Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(ArrayList(searched.reversed()))
+                val searched = searchForSubstring(hardwareList.orNull()!!, newText)
+                when (getSorting()) {
+                    Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(searched)
+                    Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(searched.reversed())
+                }
             }
             return false
         }
@@ -104,8 +94,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onLongClick(view: View, position: Int) {
                 if (ComparisonData.getCompareFirst() == null) {
                     view.apply {
-                        cv.setCardBackgroundColor(ContextCompat.getColor(cv.context, R.color.selected))
-                        recyclerView.adapter.notifyItemChanged(position)
+                        cv.setCardBackgroundColor(ContextCompat.getColor(cv.context, selected))
+                        invalidate()
                     }
                     ComparisonData.setCompareFirst(getHardware(view))
                 } else {
@@ -120,31 +110,52 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             fun getHardware(view: View): Hardware? {
                 val extractNum = Regex("([0-9])")
                 val rank = Integer.parseInt(extractNum.find(view.rank.text.toString())!!.value)
-                return getHardwareMap(getStateString()).orNull()!![rank]
+                return getHardwareMap(getStateString()).orNull()!![rank-1   ]
             }
         }))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        /*
-            1 = from details
-            2 = from comparison
-         */
-        if ((requestCode == 2 || requestCode == 1) && resultCode == Activity.RESULT_OK) {
+        if(resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        val applyColor: (Int) -> Unit = { col ->
             ComparisonData.getCompareFirst()?.let { c ->
                 recyclerView.forEachChild {
                     if (it.hardware.text.contains(c.model)) {
                         it.cv.apply {
-                            setBackgroundColor(ContextCompat.getColor(applicationContext, cardview_light_background))
+                            setBackgroundColor(ContextCompat.getColor(cv.context, col))
                             invalidate()
                         }
                     }
                 }
             }
-            if (ComparisonData.getCompareSecond() != null) {
+        }
+
+        /*
+            1 = from details
+            2 = from comparison
+        */
+        when(requestCode) {
+            1 -> {
+                data?.let {
+                    if (ComparisonData.getCompareFirst() != null) {
+                        if (ComparisonData.getCompareSecond() != null) {
+                            applyColor(cardview_light_background)
+                            ComparisonData.reset()
+                            return
+                        }
+                        applyColor(selected)
+                    }
+                }
+            }
+            2 -> {
+                applyColor(cardview_light_background)
                 ComparisonData.reset()
             }
         }
+
         super.onActivityResult(requestCode, resultCode, data)
     }
 

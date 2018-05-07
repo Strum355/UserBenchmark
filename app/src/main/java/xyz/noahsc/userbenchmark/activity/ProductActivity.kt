@@ -65,6 +65,7 @@ class ProductActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //to reset the two choices. Will revisit this decision at a later date
+            //ComparisonData.reset()
             checkBox.isChecked = false
         }
         super.onActivityResult(requestCode, resultCode, data)
