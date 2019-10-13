@@ -9,18 +9,19 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
-import android.util.Log
 import android.widget.SearchView
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import arrow.core.*
-import arrow.typeclasses.binding
+import arrow.instances.option.monad.monad
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.parts_list_row.view.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import xyz.noahsc.userbenchmark.data.*
 import org.jetbrains.anko.*
 import xyz.noahsc.userbenchmark.R.color.*
@@ -32,8 +33,9 @@ import xyz.noahsc.userbenchmark.listener.RecyclerItemClickListener
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private val queryListener = object : SearchView.OnQueryTextListener {
+    private val adapter = DataAdapter(emptyList())
 
+    private val queryListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextChange(newText: String?): Boolean {
             // Currently dont need different behaviour
             return onQueryTextSubmit(newText)
@@ -49,8 +51,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 val searched = searchForSubstring(hardwareList.orNull()!!, newText)
                 when (getSorting()) {
-                    Sorting.ASCENDING -> recyclerView.adapter = DataAdapter(searched)
-                    Sorting.DESCENDING -> recyclerView.adapter = DataAdapter(searched.reversed())
+                    Sorting.ASCENDING -> {
+                        adapter.partsList = searched
+                        recyclerView.adapter!!.notifyDataSetChanged()
+                    }
+                    Sorting.DESCENDING -> {
+                        adapter.partsList = searched
+                        recyclerView.adapter!!.notifyDataSetChanged()
+                    }
                 }
             }
             return false
@@ -77,6 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         recyclerView.layoutManager = LinearLayoutManager(applicationContext, LinearLayout.VERTICAL, false)
+        recyclerView.adapter = adapter
 
         searchView.setOnQueryTextListener(queryListener)
         setListener()
@@ -94,7 +103,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onLongClick(view: View, position: Int) {
                 if (ComparisonData.getCompareFirst() == null) {
                     view.apply {
-                        cv.setCardBackgroundColor(ContextCompat.getColor(cv.context, selected))
+                        cv.setCardBackgroundColor(ContextCompat.getColor(cv.context, xyz.noahsc.userbenchmark.R.color.selected))
                         invalidate()
                     }
                     ComparisonData.setCompareFirst(getHardware(view))
@@ -110,7 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             fun getHardware(view: View): Hardware? {
                 val extractNum = Regex("([0-9])")
                 val rank = Integer.parseInt(extractNum.find(view.rank.text.toString())!!.value)
-                return getHardwareMap(getStateString()).orNull()!![rank-1   ]
+                return getHardwareMap(getStateString()).orNull()!![rank-1]
             }
         }))
     }
@@ -146,7 +155,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             ComparisonData.reset()
                             return
                         }
-                        applyColor(selected)
+                        applyColor(xyz.noahsc.userbenchmark.R.color.selected)
                     }
                 }
             }
@@ -176,12 +185,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.closeDrawer(GravityCompat.START)
 
         //TODO clean up this godawful mess
-
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             when (item.itemId) {
                 home -> {
-                    recyclerView.adapter = null
-                    updateState("")
+                    updateState("Home")
+                    makeHardwareUI(emptyList())
                     ComparisonData.setCompareFirst(null)
                 }
                 cpu -> {
@@ -201,10 +209,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
                 //TODO DRY code pls
-
                 rank_desc -> {
                     getSorting().descending()
-
                     val text =  Option.monad().binding {
                         val state = getState().bind()
                         val map = getHardwareMap(state).bind()
@@ -238,6 +244,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }
+
         return true
     }
 
@@ -246,7 +253,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             return
         }
 
-        toolbar.title = state
+        runOnUiThread {
+            toolbar.title = state
+        }
         setState(state)
     }
 
@@ -257,7 +266,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 isIconified = true
             }
 
-            recyclerView.adapter = DataAdapter(list)
+            adapter.partsList = list
+            recyclerView.adapter!!.notifyDataSetChanged()
         }
     }
 }

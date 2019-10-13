@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.parts_list_row.view.*
 import xyz.noahsc.userbenchmark.R
 import xyz.noahsc.userbenchmark.R.layout.parts_list_row
 
-class DataAdapter(private val partsList: List<Hardware>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
+class DataAdapter(var partsList: List<Hardware>) : RecyclerView.Adapter<DataAdapter.MyViewHolder>() {
 
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
